@@ -1,0 +1,41 @@
+table.code
+	+border-radius(4px)
+	background: #f9f9f9
+	border-collapse: separate
+	border: 1px solid #ccc
+	margin: 1em 0
+	font-family: $fixed-width-font-family
+
+	th
+		+border-top-radius(4px)
+		padding: .5em 1em
+		color: #777
+		background: #f3f3f3
+		border-bottom: 1px solid #ddd
+
+	td
+		font-size: 0.9em
+
+		padding: .7em 1em
+		vertical-align: top
+
+		&:first-child
+			width: 10px
+
+		&:nth-child(2)
+			border-left: 1px solid #eee
+
+	ol
+		li
+			display: block
+		color: #888
+
+	width: 100%
+
+	code
+		+border-radius(0px)
+		border: 0
+		padding: 0
+		margin: 0
+		background: none
+		white-space: normal

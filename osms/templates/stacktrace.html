@@ -1,0 +1,30 @@
+<?php $this->uselib('components/plugins') ?>
+
+<ol class="backtrace">
+<?php foreach ($stack as $frame): ?>
+	<li>
+		<?php
+			$file = $frame['file'];
+			$line = $frame['line'];
+			$context = 3;
+			$start = $line - $context - 1;
+			$end = $line + $context - 1;
+		?>
+		<table class="code">
+		<tr>
+			<th colspan="2"><?php $this->p("$file:$line") ?></th>
+		</tr>
+		<tr>
+			<td>
+				<ol>
+				<?php for ($i=$start; $i<=$end; $i++): ?>
+					<li><?php $this->p($i + 1) ?></li>
+				<?php endfor ?>
+				</ol>
+			</td>
+			<td><?php $this->highlight($file, $start, $end); ?></td>
+		</tr>
+	</table>
+</li>
+<?php endforeach ?>
+</ol>

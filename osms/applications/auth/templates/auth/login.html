@@ -1,0 +1,20 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Login') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section>
+		<h1>Login</h1>
+
+		<?php if ($error): ?>
+		<p class="error">Invalid username or password, please try again.</p>
+		<?php endif; ?>
+
+		<form method="post">
+			<?php $this->r($this->csrfToken()) ?>
+			<?php $this->r($form->render()) ?>
+			<button type="submit">Login &rarr;</button>
+		</form>
+	</section>
+<?php $this->endblock() ?>

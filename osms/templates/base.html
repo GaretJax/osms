@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+
+	<title>oSMS · <?php $this->p($page_title) ?></title>
+
+	<link rel="stylesheet" href="<?php $this->p($config->base_url); ?>styles/master.css" type="text/css" />
+</head>
+
+<body>
+	<header>
+		<h1>oSMS</h1>
+
+		<nav>
+		<?php if ($user->isAuthenticated()): ?>
+			<ul>
+				<li><a href="<?php $this->p($config->base_url); ?>">Index</a></li>
+				<li><a href="#">New message</a></li>
+				<li><a href="#">Inbox</a></li>
+				<li><a href="#">Archive</a></li>
+				<li><a href="#">Change password</a></li>
+				<li><a href="<?php $this->p($config->base_url); ?>logout/">Logout</a></li>
+			</ul>
+		<?php else:?>
+			<ul>
+				<li><a href="<?php $this->p($config->base_url); ?>">Index</a></li>
+				<li><a href="<?php $this->p($config->base_url); ?>login/">Login</a></li>
+			</ul>
+		<?php endif; ?>
+		</nav>
+	</header>
+
+	<?php $this->block('content') ?>
+
+	<footer>
+		<p>Copyright @ 2012 The DoS Team, all rights reserved &nbsp;·&nbsp; <a href="mailto:osms-security@stoppani.name">Report a bug</a></p>
+	</footer>
+</body>
+</html>

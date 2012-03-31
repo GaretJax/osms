@@ -1,0 +1,8 @@
+RewriteEngine on
+RewriteBase /~garetjax/osms-root/htdocs/
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !.*index.php.*
+RewriteCond %{REQUEST_FILENAME} !.*\.(css|js|png)
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+

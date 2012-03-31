@@ -1,0 +1,63 @@
+font-size: 1.3em
+line-height: 1.5em
+
+h1
+	color: #444
+	font-weight: bold
+	font-size: 1.53em
+	border-bottom: 1px solid #ccc
+	margin: -.2em 0 1em 0
+	padding: 0 0 .5em 0
+
+h2
+	font-weight: bold
+	font-size: 1.23em
+	color: #555
+	margin: 1.8em 0 .5em 0
+	padding: 0 0 .5em 0
+	border-bottom: 1px solid #e3e3e3
+
+h1 + h2
+	margin-top: 1em
+
+ol li
+	list-style-type: decimal
+
+p
+	margin: 1em 0
+
+form
+	@import "forms"
+
+pre code
+	+border-radius(4px)
+	display: block
+	background: #f9f9f9
+	border: 1px solid #ccc
+	padding: .8em 1em
+	margin: 1em 0
+
+code
+	white-space: pre
+	font-family: $fixed-width-font-family
+	line-height: 1em
+	overflow: auto
+
+h2 code
+	font-weight: normal
+	color: #333
+	background: #ffffc3
+	padding: 0 .3em
+
+
+.error
+	+border-radius(4px)
+	background: rgba(255, 0, 0, .2)
+	border: 1px solid rgb(200, 0, 0)
+	padding: 1em
+	color: rgb(150, 0, 0)
+
+.backtrace li
+	list-style-type: none
+
+@import backtrace

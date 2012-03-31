@@ -1,0 +1,7 @@
+*.scssc
+*.sassc
+.sass-cache/
+Gemfile.lock
+*.css
+*.js
+/info.php
