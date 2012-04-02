@@ -1,21 +1,32 @@
 <?php namespace osmf;
-
 /**
  * This is the bootstrap file for the OSMF framework, this should be
  * the only php file available under your publicly accessible web
  * directory.
  */
 
-// Define needed constants for include paths and files inclusion
+/**
+ * This is the path to the location where the 'osmf' folder is located.
+ *
+ * This location will be added to the path in order for the inclusions
+ * of the framework related files to work.
+ */
 define('LIBRARIES_PATH', '/Users/garetjax/Sites/osms-root');
+
 define('APPLICATION_PATH', '/Users/garetjax/Sites/osms-root/osms');
+
 define('SETTINGS_FILE', 'settings.php');
 
-// Set up include paths
-set_include_path(LIBRARIES_PATH . PATH_SEPARATOR . get_include_path());
+/* --------------------------------------------------------------------- */
+
+// Setup include path
+if (defined('LIBRARIES_PATH') && LIBRARIES_PATH !== '') {
+	set_include_path(LIBRARIES_PATH . PATH_SEPARATOR . get_include_path());
+}
+
 set_include_path(APPLICATION_PATH . PATH_SEPARATOR . get_include_path());
 
-// Include needed components
+// Bootstrap the framework
 require_once 'osmf/bootstrap.php';
 
 $config = Config::getInstance();
@@ -32,8 +43,10 @@ try {
 	$response->carryOut();
 } catch (\Exception $e) {
 	if ($config->debug) {
+		// This should not happen, errors should be caught by the
+		// dispatcher and dealt accordingly.
 		var_dump($e);
 	} else {
-		// TODO: Log to file
+		throw $e;
 	}
 }
