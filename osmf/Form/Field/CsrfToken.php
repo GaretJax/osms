@@ -1,4 +1,4 @@
-<?php namespace osms\Form\Field;
+<?php namespace osmf\Form\Field;
 
 
 class CsrfTokenField extends \osmf\Form\Field
