@@ -1,6 +1,7 @@
 *.scssc
 *.sassc
 .sass-cache/
+api/
 Gemfile.lock
 *.css
 *.js
