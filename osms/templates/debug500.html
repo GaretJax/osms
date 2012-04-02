@@ -1,10 +1,22 @@
 <?php $this->uselib('components/plugins') ?>
 <?php $this->set('page_title', 'Server error') ?>
 
-<?php $this->extend('base.html') ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
 
-<?php $this->startblock('content') ?>
-<section>
+	<title>oSMS · <?php $this->p($page_title) ?></title>
+
+	<link rel="stylesheet" href="<?php $this->p($config->base_url); ?>styles/master.css" type="text/css" />
+</head>
+
+<body>
+	<header>
+		<h1>oSMS</h1>
+	</header>
+
+	<section>
 		<h1>Error 500: Server error</h1>
 
 		<?php
@@ -29,4 +41,9 @@
 		<p>SERVER</p>
 		<pre><?php highlight_string(var_export($_SERVER, TRUE)) ?></pre>
 	</section>
-<?php $this->endblock() ?>
+	
+	<footer>
+		<p>Copyright @ 2012 The DoS Team, all rights reserved &nbsp;·&nbsp; <a href="mailto:osms-security@stoppani.name">Report a bug</a></p>
+	</footer>
+</body>
+
