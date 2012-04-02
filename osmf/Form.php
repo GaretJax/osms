@@ -14,15 +14,8 @@ abstract class Form
 
 	public function __construct($data=array())
 	{
-		$properties = $this->getModelProperties();
-		$this->fields = $properties['fields'];
+		$this->fields = static::$properties['fields'];
 		$this->populate($data);
-	}
-
-	protected function getModelProperties()
-	{
-		$class = get_class($this);
-		return $class::$_properties;
 	}
 
 	protected function populate($data)

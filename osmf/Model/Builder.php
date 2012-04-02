@@ -42,20 +42,18 @@ class Builder
 		$code = "
 		namespace $namespace;
 		class $class extends $parent {
-			protected static \$_properties;
+			protected static \$properties;
 		}";
 		eval($code);
 		$class = $namespace . '\\' . $class;
 
 		$reflected = new \ReflectionClass($class);
 
-		$fields = $reflected->getProperty('_properties');
+		$fields = $reflected->getProperty('properties');
 		$fields->setAccessible(true);
 		$fields->setValue(array(
 			'name' => $this->table,
 			'fields' => &$this->fields,
 		));
-
-		runkit_method_copy($class, 'get', 'osmf\Model', '_get');
 	}
 }

@@ -11,9 +11,8 @@ abstract class Model
 
 	public function __construct($dbconf=NULL)
 	{
-		$properties = $this->getModelProperties();
-		$this->fields = $properties['fields'];
-		$this->table = $properties['name'];
+		$this->fields = static::$properties['fields'];
+		$this->table = static::$properties['name'];
 		$this->dbh = \osmf\Database\Driver::getInstance($dbconf);
 	}
 
@@ -56,10 +55,9 @@ abstract class Model
 		$stmt->execute($values);
 	}
 
-	public static function _get($id, $dbconf=NULL)
+	public static function get($id, $dbconf=NULL)
 	{
-		$class = get_class();
-		$properties = $class::$_properties;
+		$properties = static::$properties;
 		$fields = $properties['fields'];
 
 		$dbh = \osmf\Database\Driver::getInstance($dbconf);
@@ -79,7 +77,7 @@ abstract class Model
 
 		$dataobj = $stmt->fetch(\PDO::FETCH_LAZY);
 
-		$model = new $class();
+		$model = new static();
 		$model->loadedValues = $dataobj;
 		return $model;
 	}
