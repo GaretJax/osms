@@ -1,7 +1,7 @@
 <?php namespace osmf;
 
 
-class Model
+abstract class Model
 {
 	protected $fields = array();
 	protected $values = array();

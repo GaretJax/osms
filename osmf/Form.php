@@ -1,7 +1,7 @@
 <?php namespace osmf;
 
 
-class Form
+abstract class Form
 {
 	protected $cleaned = FALSE;
 	protected $fields = array();
