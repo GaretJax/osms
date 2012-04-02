@@ -2,22 +2,13 @@
 
 
 require_once 'applications/auth/models.php';
+require_once 'applications/auth/forms.php';
 
 
 class Login extends \osmf\View
 {
 	protected function buildLoginForm()
 	{
-		$form = new \osmf\Form\Builder();
-
-		$form->add('username', 'Char', array(
-			'label' => 'Username',
-		));
-		$form->add('password', 'Password', array(
-			'label' => 'Password',
-		));
-
-		return $form;
 	}
 
 	protected function redirectAuthenticated($request)
@@ -34,7 +25,7 @@ class Login extends \osmf\View
 	{
 		$this->redirectAuthenticated($request);
 		$this->context->error = FALSE;
-		$this->context->form = $this->buildLoginForm()->getForm();
+		$this->context->form = new LoginForm();
 
 		/*$model = new User();
 		$model->username = 'test1';
@@ -53,7 +44,7 @@ class Login extends \osmf\View
 	protected function render_POST($request)
 	{
 		$this->redirectAuthenticated($request);
-		$form = $this->buildLoginForm()->getForm($request->POST);
+		$form = new LoginForm($request->POST);
 
 		if ($form->isValid()) {
 			// TODO: Check username & password

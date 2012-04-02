@@ -12,10 +12,17 @@ class Form
 
 	public $cleaned_data = array();
 
-	public function __construct($fields, $data=array())
+	public function __construct($data=array())
 	{
-		$this->fields = $fields;
+		$properties = $this->getModelProperties();
+		$this->fields = $properties['fields'];
 		$this->populate($data);
+	}
+
+	protected function getModelProperties()
+	{
+		$class = get_class($this);
+		return $class::$_properties;
 	}
 
 	protected function populate($data)

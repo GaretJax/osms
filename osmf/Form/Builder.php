@@ -4,8 +4,17 @@
 class Builder
 {
 	protected $fields = array();
+	protected $name;
+	protected $namespace;
 
-	public function add($name, $fieldClass, $args=array())
+	public function __construct($name, $namespace=__NAMESPACE__)
+	{
+		$this->name = $name;
+		$this->namespace = $namespace;
+		$this->createForm();
+	}
+
+	public function addField($name, $fieldClass, $args=array())
 	{
 		$fieldClass = __NAMESPACE__ . '\Field\\' . $fieldClass;
 
@@ -15,8 +24,25 @@ class Builder
 		return $this;
 	}
 
-	public function getForm($data=array())
+	protected function createForm()
 	{
-		return new \osmf\Form($this->fields, $data);
+		$namespace = $this->namespace;
+		$class = $this->name;
+		$parent = '\osmf\Form';
+		$code = "
+		namespace $namespace;
+		class $class extends $parent {
+			protected static \$_properties;
+		}";
+		eval($code);
+		$class = $namespace . '\\' . $class;
+
+		$reflected = new \ReflectionClass($class);
+
+		$fields = $reflected->getProperty('_properties');
+		$fields->setAccessible(true);
+		$fields->setValue(array(
+			'fields' => &$this->fields,
+		));
 	}
 }

@@ -12,7 +12,7 @@ class Builder
 	{
 		$this->name = $name;
 		$this->namespace = $namespace;
-		$this->add('id', 'PrimaryKey');
+		$this->addColumn('id', 'PrimaryKey');
 
 		if ($table === NULL) {
 			$components = explode('\\', $namespace);
@@ -20,9 +20,11 @@ class Builder
 			$table = strtolower(implode('_', $components));
 		}
 		$this->table = $table;
+
+		$this->createModel();
 	}
 
-	public function add($name, $fieldClass, $args=array())
+	public function addColumn($name, $fieldClass, $args=array())
 	{
 		$fieldClass = __NAMESPACE__ . '\Field\\' . $fieldClass;
 
@@ -32,14 +34,14 @@ class Builder
 		return $this;
 	}
 
-	public function createModel()
+	protected function createModel()
 	{
 		$namespace = $this->namespace;
 		$class = $this->name;
 		$parent = '\osmf\Model';
 		$code = "
 		namespace $namespace;
-		class $class extends \osmf\Model {
+		class $class extends $parent {
 			protected static \$_properties;
 		}";
 		eval($code);
@@ -51,7 +53,7 @@ class Builder
 		$fields->setAccessible(true);
 		$fields->setValue(array(
 			'name' => $this->table,
-			'fields' => $this->fields,
+			'fields' => &$this->fields,
 		));
 
 		runkit_method_copy($class, 'get', 'osmf\Model', '_get');
