@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<routes>
+	<route name="index" pattern="^/$">
+		<view name="osmf.DirectToTemplate">
+			<param name="template" value="index.html"/>
+		</view>
+		<grant role="*" />
+	</route>
+
+	<route name="login" pattern="^/login/$">
+		<view name="auth.Login"/>
+		<grant role="*" />
+	</route>
+
+	<route name="logout" pattern="^/logout/$">
+		<view name="auth.Logout"/>
+		<grant role="*" />
+	</route>
+</routes>

@@ -5,13 +5,11 @@ class Builder
 {
 	protected $fields = array();
 	protected $name;
-	protected $namespace;
 	protected $table;
 
-	public function __construct($name, $namespace=__NAMESPACE__, $table=NULL)
+	public function __construct($name, $table=NULL)
 	{
 		$this->name = $name;
-		$this->namespace = $namespace;
 		$this->addColumn('id', 'PrimaryKey');
 
 		if ($table === NULL) {
@@ -36,8 +34,9 @@ class Builder
 
 	protected function createModel()
 	{
-		$namespace = $this->namespace;
-		$class = $this->name;
+		$namespace = explode('\\', $this->name);
+		$class = array_pop($namespace);
+		$namespace = implode('\\', $namespace);
 		$parent = '\osmf\Model';
 		$code = "
 		namespace $namespace;
@@ -45,9 +44,8 @@ class Builder
 			protected static \$properties;
 		}";
 		eval($code);
-		$class = $namespace . '\\' . $class;
 
-		$reflected = new \ReflectionClass($class);
+		$reflected = new \ReflectionClass($this->name);
 
 		$fields = $reflected->getProperty('properties');
 		$fields->setAccessible(true);

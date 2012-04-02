@@ -1,17 +1,37 @@
 <?php namespace osmf\Auth;
 
 
+class AnonymousUser implements IUserModel
+{
+	public function getRole()
+	{
+		return NULL;
+	}
+}
+
+
 class User
 {
-	protected $is_authenticated = FALSE;
 	protected $session;
+	protected $is_authenticated;
+	protected $model;
 
 	public function __construct($session) {
 		$this->session = $session;
 
 		if ($session->get('user_id')) {
+			$class = \osmf\Config::get('user_model');
 			$this->is_authenticated = TRUE;
+			$this->model = $class::get(intval($session->get('user_id')));
+		} else {
+			$this->is_authenticated = FALSE;
+			$this->model = new AnonymousUser();
 		}
+	}
+
+	public function getRole()
+	{
+		return $this->model->getRole();
 	}
 
 	public function isAuthenticated()
@@ -22,7 +42,7 @@ class User
 	public function login()
 	{
 		$this->is_authenticated = TRUE;
-		$this->session->set('user_id', 1);
+		$this->session->set('user_id', 34);
 	}
 
 	public function logout()

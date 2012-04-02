@@ -1,24 +1,20 @@
-<?php namespace osmf;
+<?php namespace osmf\Views;
 
 
-class DirectToTemplate extends View
+class DirectToTemplate extends \osmf\View
 {
-	private $template;
-
-	public function __construct($template, $context=NULL)
+	public function __construct($parameters, $context=NULL)
 	{
-		parent::__construct();
+		parent::__construct($parameters);
 
 		if (!is_null($context)) {
 			$this->context = $context;
 		}
-
-		$this->template = $template;
 	}
 
 	public function render($request)
 	{
 		$this->request = $request;
-		return $this->renderResponse($this->template);
+		return $this->renderResponse($this->parameters['template']);
 	}
 }

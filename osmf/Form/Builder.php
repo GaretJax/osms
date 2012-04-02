@@ -5,12 +5,10 @@ class Builder
 {
 	protected $fields = array();
 	protected $name;
-	protected $namespace;
 
-	public function __construct($name, $namespace=__NAMESPACE__)
+	public function __construct($name)
 	{
 		$this->name = $name;
-		$this->namespace = $namespace;
 		$this->createForm();
 	}
 
@@ -26,8 +24,9 @@ class Builder
 
 	protected function createForm()
 	{
-		$namespace = $this->namespace;
-		$class = $this->name;
+		$namespace = explode('\\', $this->name);
+		$class = array_pop($namespace);
+		$namespace = implode('\\', $namespace);
 		$parent = '\osmf\Form';
 		$code = "
 		namespace $namespace;
@@ -35,9 +34,8 @@ class Builder
 			protected static \$properties;
 		}";
 		eval($code);
-		$class = $namespace . '\\' . $class;
 
-		$reflected = new \ReflectionClass($class);
+		$reflected = new \ReflectionClass($this->name);
 
 		$fields = $reflected->getProperty('properties');
 		$fields->setAccessible(true);

@@ -1,17 +1,12 @@
-<?php namespace osms\Auth;
+<?php namespace osms\auth\views;
 
-
-require_once 'applications/auth/models.php';
-require_once 'applications/auth/forms.php';
+use \osms\auth\models;
+use \osms\auth\forms;
 
 
 class Login extends \osmf\View
 {
-	protected function buildLoginForm()
-	{
-	}
-
-	protected function redirectAuthenticated($request)
+	protected function redirectIfAuthenticated($request)
 	{
 		$config = \osmf\Config::getInstance();
 
@@ -21,30 +16,33 @@ class Login extends \osmf\View
 		}
 	}
 
+	protected function checkPermissions()
+	{
+		return True;
+	}
+
 	protected function render_GET($request)
 	{
-		$this->redirectAuthenticated($request);
+		$this->redirectIfAuthenticated($request);
 		$this->context->error = FALSE;
-		$this->context->form = new LoginForm();
+		$this->context->form = new forms\Login();
 
 		/*$model = new User();
 		$model->username = 'test1';
 		$model->password = 'pass';
 		$model->save();*/
 
-		$model = User::get(34);
+		/*$model = models\User::get(34);
 		$model->password = "pass23";
-		$model->save();
-
-		//throw new \Exception("You are not allowed to access this method");
+		$model->save();*/
 
 		return $this->renderResponse('auth/login.html');
 	}
 
 	protected function render_POST($request)
 	{
-		$this->redirectAuthenticated($request);
-		$form = new LoginForm($request->POST);
+		$this->redirectIfAuthenticated($request);
+		$form = new forms\Login($request->POST);
 
 		if ($form->isValid()) {
 			// TODO: Check username & password

@@ -70,7 +70,7 @@ abstract class Model
 		$stmt->execute(array('id' => $id));
 
 		if ($stmt->rowCount() === 0) {
-			throw new \Exception('Model not found');
+			throw new \Exception('Object not found');
 		} else if ($stmt->rowCount() > 1) {
 			throw new \Exception('Multiple results returned');
 		}

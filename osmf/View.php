@@ -5,10 +5,12 @@ class View
 {
 	protected $context;
 	protected $request;
+	protected $parameters;
 
-	public function __construct()
+	public function __construct($parameters)
 	{
 		$this->initContext();
+		$this->parameters = $parameters;
 	}
 
 	protected function initContext()

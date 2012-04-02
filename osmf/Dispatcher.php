@@ -60,7 +60,7 @@ class Dispatcher
 			unset($_GET);
 			unset($_REQUEST);
 
-			$view = $route->getView();
+			$view = $route->getView($request);
 			return $view->render($request);
 		} catch (Http\Response\NotFound $e) {
 			if (Config::get('debug')) {
@@ -71,7 +71,7 @@ class Dispatcher
 			
 			$context = new \stdClass();
 			$context->exception = $e;
-			$view = new DirectToTemplate($tpl, $context);
+			$view = new Views\DirectToTemplate(array('template' => $tpl), $context);
 			return $view->render($request);
 		} catch (Http\Response $e) {
 			return $e;
@@ -84,7 +84,7 @@ class Dispatcher
 	
 			$context = new \stdClass();
 			$context->exception = $e;
-			$view = new DirectToTemplate($tpl, $context);
+			$view = new Views\DirectToTemplate(array('template' => $tpl), $context);
 			return $view->render($request);
 		}
 	}

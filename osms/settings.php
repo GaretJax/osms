@@ -62,7 +62,7 @@ $config->template_search_dirs = array(
 /**
  * Base routes definition file.
  */
-$config->urlconf = __DIR__ . DIRECTORY_SEPARATOR . 'urls.php';
+$config->urlconf = __DIR__ . DIRECTORY_SEPARATOR . 'urls.xml';
 
 /**
  * Path in the URL where the application is hosted.
@@ -89,3 +89,8 @@ $config->databases = array(
 		'pass' => '123456osms',
 	),
 );
+
+/**
+ * The model to use 
+ */
+$config->user_model = '\osms\auth\models\User';
