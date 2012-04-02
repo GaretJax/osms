@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+	<title>oSMS Framework</title>
+	<parser>
+		<target>api</target>
+		<extensions>
+			<extension>php</extension>
+			<extension>html</extension>
+		</extensions>
+	</parser>
+	<transformer>
+		<target>api</target>
+	</transformer>
+	<files>
+		<directory>osmf</directory>
+	</files>
+</phpdoc>
