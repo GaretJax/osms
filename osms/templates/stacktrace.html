@@ -4,7 +4,12 @@
 <?php foreach ($stack as $frame): ?>
 	<li>
 		<?php
-			$file = $frame['file'];
+			$file = \array_get($frame, 'file', NULL);
+
+			if (!$file) {
+				continue;
+			}
+
 			$line = $frame['line'];
 			$context = 3;
 			$start = $line - $context - 1;

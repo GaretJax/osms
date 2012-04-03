@@ -3,7 +3,7 @@
 
 abstract class Model
 {
-	protected $fields = array();
+	protected $fields;
 	protected $values = array();
 	protected $loadedValues = array();
 	protected $table;
@@ -23,7 +23,7 @@ abstract class Model
 		if (array_key_exists($name, $this->values)) {
 			return $this->values[$name];
 		} else {
-			return $this->loadedValues->$name;
+			return \array_get($this->loadedValues, $name, NULL);
 		}
 	}
 
@@ -55,22 +55,28 @@ abstract class Model
 		$stmt->execute($values);
 	}
 
-	public static function get($id, $dbconf=NULL)
+	public static function get($query, $dbconf=NULL)
 	{
+		if (!is_array($query)) {
+			$query = array(
+				'id' => $query,
+			);
+		}
+
 		$properties = static::$properties;
 		$fields = $properties['fields'];
 
 		$dbh = \osmf\Database\Driver::getInstance($dbconf);
 		$stmt = $dbh->prepareSelectStatement(
 			$properties['name'],
-			array('id'),
+			array_keys($query),
 			array_keys($properties['fields'])
 		);
 
-		$stmt->execute(array('id' => $id));
+		$stmt->execute($query);
 
 		if ($stmt->rowCount() === 0) {
-			throw new \Exception('Object not found');
+			throw new Model\ObjectNotFound('Object not found');
 		} else if ($stmt->rowCount() > 1) {
 			throw new \Exception('Multiple results returned');
 		}

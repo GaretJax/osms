@@ -7,14 +7,13 @@ class Session
 	// mentions databases as session handlers:
 	// http://ch2.php.net/manual/en/session.customhandler.php
 
-	public function __construct($name, $session_id, $lifetime, $regenerate)
+	public function __construct($name, $session_id, $path, $lifetime, $regenerate)
 	{
 		session_name($name);
 		if ($session_id) {
 			session_id($session_id);
 		}
 
-		$path = substr($_SERVER['REQUEST_URI'], 0, -strlen($_SERVER['PATH_INFO']));
 		$domain = $_SERVER['HTTP_HOST'];
 		$secure = isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on';
 		$httponly = TRUE;

@@ -44,6 +44,9 @@ class View
 		$config = Config::getInstance();
 		foreach ($config->context_processors as $cp) {
 			$merge = call_user_func($cp, $this->request);
+			if ($merge === NULL) {
+				continue;
+			}
 			foreach ($merge as $key => $value) {
 				$this->context->$key = $value;
 			}

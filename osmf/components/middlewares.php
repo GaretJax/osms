@@ -10,6 +10,7 @@ class SessionMiddleware extends Middleware
 		$session_id = \array_get($request->COOKIES, $name, '');
 		$request->session = new Session(
 			'session', $session_id,
+			$config->base_url,
 			$config->session['lifetime'],
 			$config->session['regenerate']
 		);

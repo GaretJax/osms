@@ -5,9 +5,11 @@ class ContextProcessors
 {
 	public static function auth($request)
 	{
-		return array(
-			'user' => $request->user,
-		);
+		if (isset($request->user)) {
+			return array(
+				'user' => $request->user,
+			);
+		}
 	}
 
 	public static function config($request)

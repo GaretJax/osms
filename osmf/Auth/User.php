@@ -1,7 +1,7 @@
 <?php namespace osmf\Auth;
 
 
-class AnonymousUser implements IUserModel
+class AnonymousUser
 {
 	public function getRole()
 	{
@@ -33,6 +33,12 @@ class User
 	{
 		return $this->model->getRole();
 	}
+
+	public function getUsername()
+	{
+		return $this->model->getUsername();
+	}
+
 
 	public function isAuthenticated()
 	{

@@ -16,7 +16,7 @@ class CsrfPlugin extends \osmf\Template\Plugin
 $template->registerPlugin(new CsrfPlugin());
 
 
-class FileHighlighingPlugin extends \osmf\Template\Plugin
+class FileHighligthingPlugin extends \osmf\Template\Plugin
 {
 	protected $name = 'highlight';
 
@@ -49,7 +49,7 @@ class FileHighlighingPlugin extends \osmf\Template\Plugin
 		echo $content;
 	}
 }
-$template->registerPlugin(new FileHighlighingPlugin());
+$template->registerPlugin(new FileHighligthingPlugin());
 
 
 class BacktracePlugin extends \osmf\Template\Plugin

@@ -45,7 +45,9 @@ try {
 	if ($config->debug) {
 		// This should not happen, errors should be caught by the
 		// dispatcher and dealt accordingly.
+		echo "<pre>";
 		var_dump($e);
+		echo "</pre>";
 	} else {
 		throw $e;
 	}
