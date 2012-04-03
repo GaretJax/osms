@@ -30,8 +30,12 @@ class View
 		return new Http\Response\Redirect($url);
 	}
 
-	protected function renderResponse($template)
+	protected function renderResponse($template, $response_class=NULL)
 	{
+		if ($response_class === NULL) {
+			$response_class = '\osmf\Http\Response';
+		}
+
 		$template = new Template($template);
 
 		// Execute context processors
@@ -44,7 +48,7 @@ class View
 		}
 
 		$content = $template->render($this->context);
-		return new Http\Response($content);
+		return new $response_class($content);
 	}
 
 	protected function render_GET($request)

@@ -75,6 +75,6 @@ class Router
 			}
 		}
 
-		throw new Http\Response\NotFound("Page not found");
+		throw new Http\Error\Http404("Page not found");
 	}
 }

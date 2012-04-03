@@ -34,3 +34,30 @@ class CsrfMiddleware extends Middleware
 		}
 	}
 }
+
+
+class NotFoundMiddleware extends Middleware
+{
+	public function process_exception($request, $exception)
+	{
+		if (!is_a($exception, '\osmf\Http\Error\Http404')) {
+			return NULL;
+		}
+
+		if (Config::get('debug')) {
+			$tpl = '404-debug.html';
+		} else {
+			$tpl = '404.html';
+		}
+			
+		$context = new \stdClass();
+		$context->exception = $exception;
+		$view = new Views\DirectToTemplate(array(
+			'template' => $tpl,
+			'response_class' => '\osmf\Http\Response\NotFound',
+		), $context);
+
+		$response = $view->render($request);
+		return $response;
+	}
+}

@@ -29,6 +29,7 @@ $config->middleware_classes = array(
 	'\osmf\SessionMiddleware',
 	'\osmf\AuthenticationMiddleware',
 	'\osmf\CsrfMiddleware',
+	'\osmf\NotFoundMiddleware',
 );
 
 /**

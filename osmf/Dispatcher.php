@@ -66,7 +66,7 @@ class Dispatcher
 				// The middleware processing function returned a result; make sure
 				// it is a of the right type and interrupt processing.
 				// If the type does not match, raise an exception.
-				if ($retype !== NULL and !$update and is_a($result, $stopon)) {
+				if ($retype !== NULL and !$update and is_a($result, $retype)) {
 					return $result;
 				} else if ($retype !== NULL and $update) {
 					$object = $result;
@@ -94,7 +94,6 @@ class Dispatcher
 		//       Only the dispatcher should be aware of global variables.
 		$request = $this->getRequest();
 
-		// TODO: Refactor error management
 		try {
 			// Process the request middlewares before anything else. If a response
 			// is returned, stop immediately and jump to middleware response 
@@ -107,31 +106,50 @@ class Dispatcher
 			// Process the actual view only if none of the processed middlewares
 			// already returned a response object.
 			if ($response == NULL) {
-				$route = $this->router->route($request->url);
-				$view = $route->getView($request);
+				try {
+					$route = $this->router->route($request->url);
+				} catch(\Exception $e) {
+					// An exception occurred while routing a request,
+					// process exception middlewares in reverse order
+					// and stop as soon as we have a valid response object.
+					$response = $this->process_middlewares(
+						'exception', array($request, $e),
+						'\osmf\Http\Response', TRUE
+					);
 
-				$response = $this->process_middlewares(
-					'view', array($request, $view),
-					'\osmf\Http\Response'
-				);
+					// If no exception middleware returned a valid response,
+					// raise the exception.
+					if ($response === NULL) {
+						throw $e;
+					}
+				}
 
-				// If new response was returned until now, render the view
 				if ($response === NULL) {
-					try {
-						$response = $view->render($request);
-					} catch (\Exception $e) {
-						// An exception occurred while rendering a view,
-						// process exception middlewares in reverse order
-						// and stop as soon as we have a valid response object.
-						$response = $this->process_middlewares(
-							'response', array($request, $e),
-							'\osmf\Http\Response', TRUE
-						);
+					$view = $route->getView($request);
 
-						// If no exception middleware returned a valid response,
-						// raise the exception.
-						if ($response === NULL) {
-							throw $e;
+					$response = $this->process_middlewares(
+						'view', array($request, $view),
+						'\osmf\Http\Response'
+					);
+
+					// If new response was returned until now, render the view
+					if ($response === NULL) {
+						try {
+							$response = $view->render($request);
+						} catch (\Exception $e) {
+							// An exception occurred while rendering a view,
+							// process exception middlewares in reverse order
+							// and stop as soon as we have a valid response object.
+							$response = $this->process_middlewares(
+								'exception', array($request, $e),
+								'\osmf\Http\Response', TRUE
+							);
+
+							// If no exception middleware returned a valid response,
+							// raise the exception.
+							if ($response === NULL) {
+								throw $e;
+							}
 						}
 					}
 				}
@@ -146,22 +164,9 @@ class Dispatcher
 			);
 
 			return $response;
-		} catch (Http\Response\NotFound $e) {
-			if (Config::get('debug')) {
-				$tpl = 'debug404.html';
-			} else {
-				$tpl = '404.html';
-			}
-			
-			$context = new \stdClass();
-			$context->exception = $e;
-			$view = new Views\DirectToTemplate(array('template' => $tpl), $context);
-			return $view->render($request);
-		} catch (Http\Response $e) {
-			return $e;
 		} catch (\Exception $e) {
 			if (Config::get('debug')) {
-				$tpl = 'debug500.html';
+				$tpl = '500-debug.html';
 			} else {
 				$tpl = '500.html';
 			}

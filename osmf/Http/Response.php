@@ -1,7 +1,7 @@
 <?php namespace osmf\Http;
 
 
-class Response extends \Exception
+class Response
 {
 	protected $code;
 	protected $content;
