@@ -7,7 +7,7 @@ class Request
 	public $method;
 	public $POST;
 	public $GET;
-	public $COOKIE;
+	public $COOKIES;
 
 	public function __construct($path, $method, $get, $post, $cookie)
 	{
@@ -15,6 +15,6 @@ class Request
 		$this->method = $method;
 		$this->POST = $post;
 		$this->GET = $get;
-		$this->COOKIE = $cookie;
+		$this->COOKIES = $cookie;
 	}
 }

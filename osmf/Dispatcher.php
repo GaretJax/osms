@@ -43,7 +43,10 @@ class Dispatcher
 		unset($_POST);
 		unset($_GET);
 		unset($_REQUEST);
-		unset($_COOKIE);
+
+		// We can't clear cookies without having to hack around to make
+		// sessions work without them.
+		//unset($_COOKIE);
 
 		return $request;
 	}
