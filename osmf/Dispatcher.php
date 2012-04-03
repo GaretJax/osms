@@ -105,7 +105,7 @@ class Dispatcher
 				// Process the actual view only; none of the processed request 
 				// middlewares returned a response object.
 				try {
-					$route = $this->router->route($request->url);
+					$route = $this->router->route($request->path);
 				} catch(\Exception $e) {
 					// An exception occurred while routing a request,
 					// process exception middlewares in reverse order

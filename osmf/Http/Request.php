@@ -3,15 +3,15 @@
 
 class Request
 {
-	public $url;
+	public $path;
 	public $method;
 	public $POST;
 	public $GET;
 	public $COOKIE;
 
-	public function __construct($url, $method, $get, $post, $cookie)
+	public function __construct($path, $method, $get, $post, $cookie)
 	{
-		$this->url = $url;
+		$this->path = $path;
 		$this->method = $method;
 		$this->POST = $post;
 		$this->GET = $get;
