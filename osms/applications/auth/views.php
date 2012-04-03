@@ -49,8 +49,20 @@ class Login extends \osmf\View
 
 		if ($form->isValid()) {
 			// TODO: Check username & password
-			$request->user->login();
-			return $this->redirect(\osmf\Config::get('base_url'));
+			try {
+				$model = models\User::get(array(
+					'username' => $form->cleaned_data['username']
+				));
+
+				$password = $form->cleaned_data['password'];
+				
+				if ($request->user->checkLoginAs($model, $password)) {
+					return $this->redirectAuthenticated();
+				}
+				//var_dump($model->username);
+				//$request->user->login();
+			} catch (\osmf\Model\ObjectNotFound $e) {
+			}
 		}
 
 		$this->context->error = TRUE;

@@ -29,6 +29,16 @@ class User
 		}
 	}
 
+	public function checkLoginAs($model, $password)
+	{
+		if ($model->checkPassword($password)) {
+			$this->loginAs($model);
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
 	public function getRole()
 	{
 		return $this->model->getRole();
@@ -45,10 +55,11 @@ class User
 		return $this->is_authenticated;
 	}
 
-	public function login()
+	public function loginAs($model)
 	{
+		$this->model = $model;
 		$this->is_authenticated = TRUE;
-		$this->session->set('user_id', 34);
+		$this->session->set('user_id', $model->getUserId());
 		$this->session->regenerate();
 	}
 
