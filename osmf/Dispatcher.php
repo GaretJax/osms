@@ -39,6 +39,13 @@ class Dispatcher
 	{
 		$request = new Http\Request();
 		$request->method = $_SERVER['REQUEST_METHOD'];
+		$request->url = $this->getUrl();
+
+		// Clean the global environment
+		unset($_POST);
+		unset($_GET);
+		unset($_REQUEST);
+
 
 		return $request;
 	}
@@ -85,10 +92,6 @@ class Dispatcher
 	{
 		// TODO: Pass arguments for GET, POST, etc to the request object.
 		//       Only the dispatcher should be aware of global variables.
-		// TODO: Also get the url at this stage and pass it to the request
-		//       and succesively pass the request to the router; this allows
-		//       request middlewares to modify the url before the routing 
-		//       mechanism kicks in.
 		$request = $this->getRequest();
 
 		// TODO: Refactor error management
@@ -104,15 +107,7 @@ class Dispatcher
 			// Process the actual view only if none of the processed middlewares
 			// already returned a response object.
 			if ($response == NULL) {
-				$url = $this->getUrl();
-				$route = $this->router->route($url);
-				$request->args = $route->getArgs();
-
-				// Clean the global environment
-				unset($_POST);
-				unset($_GET);
-				unset($_REQUEST);
-
+				$route = $this->router->route($request->url);
 				$view = $route->getView($request);
 
 				$response = $this->process_middlewares(

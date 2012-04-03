@@ -33,11 +33,8 @@ class Route
 	{
 		$this->checkPermissions($request->user);
 
-		return new $this->view($this->parameters);
-	}
+		$request->args = $this->args;
 
-	public function getArgs()
-	{
-		return $this->args;
+		return new $this->view($this->parameters);
 	}
 }
