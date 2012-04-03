@@ -12,7 +12,7 @@ $config->debug = TRUE;
  * instance.
  */
 $config->installed_apps = array(
-    'auth',
+	'auth',
 );
 
 /**
@@ -48,8 +48,8 @@ $config->context_processors = array(
  * List of template loader classes.
  */
 $config->template_loaders = array(
-    'osmf\ApplicationsTemplateLoader',
-    'osmf\PathTemplateLoader',
+	'osmf\ApplicationsTemplateLoader',
+	'osmf\PathTemplateLoader',
 );
 
 /**
@@ -57,7 +57,7 @@ $config->template_loaders = array(
  * osmf\PathTemplateLoader template loader implementation.
  */
 $config->template_search_dirs = array(
-    __DIR__ . DIRECTORY_SEPARATOR . 'templates',
+	__DIR__ . DIRECTORY_SEPARATOR . 'templates',
 );
 
 /**
@@ -92,6 +92,16 @@ $config->databases = array(
 );
 
 /**
- * The model to use 
+ * The model to use for retrieving user data.
  */
 $config->user_model = '\osms\auth\models\User';
+
+/**
+ * Session management setup
+ */
+$config->session = array(
+	'name': 'session',
+	'lifetime' => 60 * 60 * 24 * 7, // 1 week
+	'regenerate' => 10, // Number of requests before a new session
+	                    // ID is generated. Set to 0 to disable.
+);

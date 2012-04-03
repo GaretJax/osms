@@ -62,7 +62,8 @@ class Logout extends \osmf\View
 {
 	protected function render_GET($request, $args)
 	{
-		$this->request->user->logout();
+		$request->user->logout();
+		$request->session->destroy();
 
 		return $this->redirect(\osmf\Config::get('base_url'));
 	}

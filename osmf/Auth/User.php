@@ -43,11 +43,13 @@ class User
 	{
 		$this->is_authenticated = TRUE;
 		$this->session->set('user_id', 34);
+		$this->session->regenerate();
 	}
 
 	public function logout()
 	{
 		$this->is_authenticated = FALSE;
 		$this->session->del('user_id');
+		$this->session->regenerate();
 	}
 }

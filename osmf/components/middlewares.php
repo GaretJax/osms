@@ -5,7 +5,14 @@ class SessionMiddleware extends Middleware
 {
 	public function process_request($request)
 	{
-		$request->session = new Session();
+		$config = Config::getInstance();
+		$name = $config->session['name'];
+		$session_id = \array_get($request->COOKIES, $name, '');
+		$request->session = new Session(
+			'session', $session_id,
+			$config->session['lifetime'],
+			$config->session['regenerate']
+		);
 	}
 }
 
