@@ -8,7 +8,7 @@ class DirectToTemplate extends \osmf\View
 		parent::__construct($parameters);
 
 		if (!is_null($context)) {
-			$this->context = $context;
+			$this->context = (object) $context;
 		}
 	}
 
