@@ -83,8 +83,15 @@ class Dispatcher
 
 	public function dispatch()
 	{
+		// TODO: Pass arguments for GET, POST, etc to the request object.
+		//       Only the dispatcher should be aware of global variables.
+		// TODO: Also get the url at this stage and pass it to the request
+		//       and succesively pass the request to the router; this allows
+		//       request middlewares to modify the url before the routing 
+		//       mechanism kicks in.
 		$request = $this->getRequest();
 
+		// TODO: Refactor error management
 		try {
 			// Process the request middlewares before anything else. If a response
 			// is returned, stop immediately and jump to middleware response 
@@ -113,8 +120,25 @@ class Dispatcher
 					'\osmf\Http\Response'
 				);
 
+				// If new response was returned until now, render the view
 				if ($response === NULL) {
-					$response = $view->render($request);
+					try {
+						$response = $view->render($request);
+					} catch (\Exception $e) {
+						// An exception occurred while rendering a view,
+						// process exception middlewares in reverse order
+						// and stop as soon as we have a valid response object.
+						$response = $this->process_middlewares(
+							'response', array($request, $e),
+							'\osmf\Http\Response', TRUE
+						);
+
+						// If no exception middleware returned a valid response,
+						// raise the exception.
+						if ($response === NULL) {
+							throw $e;
+						}
+					}
 				}
 			}
 

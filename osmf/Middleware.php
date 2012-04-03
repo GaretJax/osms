@@ -13,6 +13,14 @@ abstract class Middleware
 	{
 	}
 
+	public function process_view($request, $view)
+	{
+	}
+
+	public function process_exception($request, $exception)
+	{
+	}
+
 	public function process_response($response)
 	{
 		return $response;
