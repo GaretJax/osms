@@ -43,6 +43,44 @@ class Dispatcher
 		return $request;
 	}
 
+	protected function process_middlewares($method, $arguments, $retype=NULL, $reverse=FALSE, $update=FALSE)
+	{
+		if ($reverse) {
+			$middlewares = array_reverse($this->middlewares);
+		} else {
+			$middlewares = $this->middlewares;
+		}
+
+		$method = 'process_' . $method;
+
+		foreach ($middlewares as $middleware) {
+			$result = call_user_func_array(array($middleware, $method), $arguments);
+			if ($result !== NULL) {
+				// The middleware processing function returned a result; make sure
+				// it is a of the right type and interrupt processing.
+				// If the type does not match, raise an exception.
+				if ($retype !== NULL and !$update and is_a($result, $stopon)) {
+					return $result;
+				} else if ($retype !== NULL and $update) {
+					$object = $result;
+				} else {
+					$type = gettype($result);
+					$class = get_class($middleware);
+					throw new \Exception("Invalid object of type '$type' returned from '$class' middleware, expecting '$retype'");
+				}
+			} else if ($update and $retype !== NULL) {
+				$class = get_class($middleware);
+				throw new \Exception("NULL returned from '$class' middleware, expecting '$retype'");
+			}
+		}
+
+		if ($update) {
+			return $object;
+		} else {
+			return NULL;
+		}
+	}
+
 	public function dispatch()
 	{
 		$request = $this->getRequest();
