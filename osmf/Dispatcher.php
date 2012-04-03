@@ -37,15 +37,13 @@ class Dispatcher
 
 	protected function getRequest()
 	{
-		$request = new Http\Request();
-		$request->method = $_SERVER['REQUEST_METHOD'];
-		$request->url = $this->getUrl();
+		$request = new Http\Request($this->getUrl(), $_SERVER['REQUEST_METHOD'], $_GET, $_POST, $_COOKIE);
 
 		// Clean the global environment
 		unset($_POST);
 		unset($_GET);
 		unset($_REQUEST);
-
+		unset($_COOKIE);
 
 		return $request;
 	}
