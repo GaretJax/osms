@@ -12,9 +12,8 @@ class DirectToTemplate extends \osmf\View
 		}
 	}
 
-	public function render($request, $args)
+	public function render_GET($request, $args)
 	{
-		$this->request = $request;
 		return $this->renderResponse(
 			$this->parameters['template'],
 			\array_get($this->parameters, 'response_class')

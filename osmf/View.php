@@ -4,7 +4,7 @@
 class View
 {
 	protected $context;
-	protected $request;
+	private $request;
 	protected $parameters;
 
 	public function __construct($parameters)
@@ -22,7 +22,9 @@ class View
 	{
 		$this->request = $request;
 		$func = 'render_' . $request->method;
-		return $this->$func($request, $args);
+		$response = $this->$func($request, $args);
+		$this->request = NULL;
+		return $response;
 	}
 
 	protected function redirect($url)
