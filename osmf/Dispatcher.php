@@ -103,9 +103,9 @@ class Dispatcher
 				'\osmf\Http\Response'
 			);
 
-			// Process the actual view only if none of the processed middlewares
-			// already returned a response object.
-			if ($response == NULL) {
+			if ($response === NULL) {
+				// Process the actual view only; none of the processed request 
+				// middlewares returned a response object.
 				try {
 					$route = $this->router->route($request->url);
 				} catch(\Exception $e) {
@@ -123,34 +123,36 @@ class Dispatcher
 						throw $e;
 					}
 				}
+			}
 
-				if ($response === NULL) {
-					$view = $route->getView($request);
+			if ($response === NULL) {
+				// No errors where thrown in the previous phase, continue with
+				// normal rendering flow
+				$view = $route->getView($request);
 
+				$response = $this->process_middlewares(
+					'view', array($request, $view),
+					'\osmf\Http\Response'
+				);
+			}
+
+			if ($response === NULL) {
+				// No response was returned until now, render the view
+				try {
+					$response = $view->render($request);
+				} catch (\Exception $e) {
+					// An exception occurred while rendering a view,
+					// process exception middlewares in reverse order
+					// and stop as soon as we have a valid response object.
 					$response = $this->process_middlewares(
-						'view', array($request, $view),
-						'\osmf\Http\Response'
+						'exception', array($request, $e),
+						'\osmf\Http\Response', TRUE
 					);
 
-					// If new response was returned until now, render the view
+					// If no exception middleware returned a valid response,
+					// raise the exception.
 					if ($response === NULL) {
-						try {
-							$response = $view->render($request);
-						} catch (\Exception $e) {
-							// An exception occurred while rendering a view,
-							// process exception middlewares in reverse order
-							// and stop as soon as we have a valid response object.
-							$response = $this->process_middlewares(
-								'exception', array($request, $e),
-								'\osmf\Http\Response', TRUE
-							);
-
-							// If no exception middleware returned a valid response,
-							// raise the exception.
-							if ($response === NULL) {
-								throw $e;
-							}
-						}
+						throw $e;
 					}
 				}
 			}
@@ -165,15 +167,12 @@ class Dispatcher
 
 			return $response;
 		} catch (\Exception $e) {
-			if (Config::get('debug')) {
-				$tpl = '500-debug.html';
-			} else {
-				$tpl = '500.html';
-			}
-	
-			$context = new \stdClass();
-			$context->exception = $e;
-			$view = new Views\DirectToTemplate(array('template' => $tpl), $context);
+			$view = new Views\DirectToTemplate(array(
+				'template' => Config::get('debug') ? '500-debug.html' : '500.html',
+				'response_class' => '\osmf\Http\Response\ServerError',
+			), array(
+				'exception' => $e,
+			));
 			return $view->render($request);
 		}
 	}
