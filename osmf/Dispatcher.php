@@ -17,7 +17,7 @@ class Dispatcher
 		$this->middlewares = array();
 
 		foreach (Config::get('middleware_classes') as $middleware) {
-			array_push($this->middlewares, new $middleware);
+			array_push($this->middlewares, new $middleware());
 		}
 	}
 

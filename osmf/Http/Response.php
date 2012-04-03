@@ -14,7 +14,6 @@ class Response extends \Exception
 
 	public function carryOut()
 	{
-		$this->sendCode();
 		$this->sendHeaders();
 		$this->sendBody();
 	}
@@ -26,6 +25,7 @@ class Response extends \Exception
 
 	protected function sendHeaders()
 	{
+		$this->sendCode();
 	}
 
 	protected function sendBody()
