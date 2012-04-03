@@ -18,11 +18,11 @@ class View
 		$this->context = new \stdClass();
 	}
 
-	public function render($request)
+	public function render($request, $args)
 	{
 		$this->request = $request;
 		$func = 'render_' . $request->method;
-		return $this->$func($request);
+		return $this->$func($request, $args);
 	}
 
 	protected function redirect($url)
@@ -51,12 +51,12 @@ class View
 		return new $response_class($content);
 	}
 
-	protected function render_GET($request)
+	protected function render_GET($request, $args)
 	{
 		throw new \Exception("Method not allowed");
 	}
 
-	protected function render_POST($request)
+	protected function render_POST($request, $args)
 	{
 		throw new \Exception("Method not allowed");
 	}

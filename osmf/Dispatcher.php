@@ -137,7 +137,7 @@ class Dispatcher
 			if ($response === NULL) {
 				// No response was returned until now, render the view
 				try {
-					$response = $view->render($request);
+					$response = $view->render($request, $route->getArgs());
 				} catch (\Exception $e) {
 					// An exception occurred while rendering a view,
 					// process exception middlewares in reverse order
@@ -171,7 +171,7 @@ class Dispatcher
 			), array(
 				'exception' => $e,
 			));
-			return $view->render($request);
+			return $view->render($request, new \stdClass());
 		}
 	}
 }

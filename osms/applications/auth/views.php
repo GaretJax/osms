@@ -21,7 +21,7 @@ class Login extends \osmf\View
 		return True;
 	}
 
-	protected function render_GET($request)
+	protected function render_GET($request, $args)
 	{
 		$this->redirectIfAuthenticated($request);
 		$this->context->error = FALSE;
@@ -39,7 +39,7 @@ class Login extends \osmf\View
 		return $this->renderResponse('auth/login.html');
 	}
 
-	protected function render_POST($request)
+	protected function render_POST($request, $args)
 	{
 		$this->redirectIfAuthenticated($request);
 		$form = new forms\Login($request->POST);
@@ -60,7 +60,7 @@ class Login extends \osmf\View
 
 class Logout extends \osmf\View
 {
-	protected function render_GET($request)
+	protected function render_GET($request, $args)
 	{
 		$this->request->user->logout();
 

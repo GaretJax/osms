@@ -8,7 +8,6 @@ class Request
 	public $POST;
 	public $GET;
 	public $COOKIE;
-	public $args = array();
 
 	public function __construct($url, $method, $get, $post, $cookie)
 	{

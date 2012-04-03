@@ -12,7 +12,7 @@ class DirectToTemplate extends \osmf\View
 		}
 	}
 
-	public function render($request)
+	public function render($request, $args)
 	{
 		$this->request = $request;
 		return $this->renderResponse(
