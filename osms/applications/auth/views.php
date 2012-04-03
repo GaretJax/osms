@@ -6,14 +6,11 @@ use \osms\auth\forms;
 
 class Login extends \osmf\View
 {
-	protected function redirectIfAuthenticated($request)
+	protected function redirectAuthenticated()
 	{
 		$config = \osmf\Config::getInstance();
-
-		if ($request->user->isAuthenticated()) {
-			$url = $config->base_url . $config->login_redirect_url;
-			throw $this->redirect($url);
-		}
+		$url = $config->base_url . $config->login_redirect_url;
+		return $this->redirect($url);
 	}
 
 	protected function checkPermissions()
@@ -23,7 +20,10 @@ class Login extends \osmf\View
 
 	protected function render_GET($request, $args)
 	{
-		$this->redirectIfAuthenticated($request);
+		if ($request->user->isAuthenticated()) {
+			return $this->redirectAuthenticated();
+		}
+
 		$this->context->error = FALSE;
 		$this->context->form = new forms\Login();
 
@@ -41,7 +41,10 @@ class Login extends \osmf\View
 
 	protected function render_POST($request, $args)
 	{
-		$this->redirectIfAuthenticated($request);
+		if ($request->user->isAuthenticated()) {
+			return $this->redirectAuthenticated();
+		}
+
 		$form = new forms\Login($request->POST);
 
 		if ($form->isValid()) {
