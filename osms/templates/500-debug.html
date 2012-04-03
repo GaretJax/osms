@@ -1,12 +1,11 @@
 <?php $this->uselib('components/plugins') ?>
-<?php $this->set('page_title', 'Server error') ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
 
-	<title>oSMS · <?php $this->p($page_title) ?></title>
+	<title>oSMS · Internal server error</title>
 
 	<link rel="stylesheet" href="<?php $this->p($config->base_url); ?>styles/master.css" type="text/css" />
 </head>
@@ -17,7 +16,7 @@
 	</header>
 
 	<section>
-		<h1>Error 500: Server error</h1>
+		<h1>Error 500: Internal server error</h1>
 
 		<?php
 			$file = str_replace(APPLICATION_PATH . '/', '', $exception->getFile());
