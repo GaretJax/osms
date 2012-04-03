@@ -46,7 +46,7 @@ class Dispatcher
 
 		// We can't clear cookies without having to hack around to make
 		// sessions work without them.
-		//unset($_COOKIE);
+		unset($_COOKIE);
 
 		return $request;
 	}

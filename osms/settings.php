@@ -100,7 +100,7 @@ $config->user_model = '\osms\auth\models\User';
  * Session management setup
  */
 $config->session = array(
-	'name': 'session',
+	'name' => 'session',
 	'lifetime' => 60 * 60 * 24 * 7, // 1 week
 	'regenerate' => 10, // Number of requests before a new session
 	                    // ID is generated. Set to 0 to disable.
