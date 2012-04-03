@@ -7,7 +7,8 @@ class Middleware
 	{
 	}
 
-	public function process_reponse($response)
+	public function process_response($response)
 	{
+		return $response;
 	}
 }
