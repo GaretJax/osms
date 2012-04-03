@@ -86,20 +86,47 @@ class Dispatcher
 		$request = $this->getRequest();
 
 		try {
-			foreach ($this->middlewares as $middleware) {
-				$middleware->process_request($request);
+			// Process the request middlewares before anything else. If a response
+			// is returned, stop immediately and jump to middleware response 
+			// processing.
+			$response = $this->process_middlewares(
+				'request', array($request),
+				'\osmf\Http\Response'
+			);
+
+			// Process the actual view only if none of the processed middlewares
+			// already returned a response object.
+			if ($response == NULL) {
+				$url = $this->getUrl();
+				$route = $this->router->route($url);
+				$request->args = $route->getArgs();
+
+				// Clean the global environment
+				unset($_POST);
+				unset($_GET);
+				unset($_REQUEST);
+
+				$view = $route->getView($request);
+
+				$response = $this->process_middlewares(
+					'view', array($request, $view),
+					'\osmf\Http\Response'
+				);
+
+				if ($response === NULL) {
+					$response = $view->render($request);
+				}
 			}
 
-			$url = $this->getUrl();
-			$route = $this->router->route($url);
-			$request->args = $route->getArgs();
+			// Process response middlewares in reverse order and update the 
+			// $response object each time.
+			$response = $this->process_middlewares(
+				'response', array($response),
+				'\osmf\Http\Response',
+				TRUE, TRUE
+			);
 
-			unset($_POST);
-			unset($_GET);
-			unset($_REQUEST);
-
-			$view = $route->getView($request);
-			return $view->render($request);
+			return $response;
 		} catch (Http\Response\NotFound $e) {
 			if (Config::get('debug')) {
 				$tpl = 'debug404.html';
