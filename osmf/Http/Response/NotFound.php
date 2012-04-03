@@ -3,4 +3,5 @@
 
 class NotFound extends \osmf\Http\Response
 {
+	protected $code = 404;
 }

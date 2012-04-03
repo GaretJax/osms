@@ -3,13 +3,15 @@
 
 class Response
 {
-	protected $code;
+	protected $code = 200;
 	protected $content;
 
-	public function __construct($content, $code=200)
+	public function __construct($content, $code=NULL)
 	{
 		$this->content = $content;
-		$this->code = $code;
+		if ($code !== NULL) {
+			$this->code = $code;
+		}
 	}
 
 	public function carryOut()
