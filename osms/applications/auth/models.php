@@ -14,8 +14,13 @@ $user->addColumn('role', 'ForeignKey', array(
 
 class User extends BaseUser implements \osmf\Auth\IUserModel
 {
-	// More info: https://gist.github.com/972386
-	// // http://stackoverflow.com/questions/4795385/how-do-you-use-bcrypt-for-hashing-passwords-in-php
+	// More info:
+	//  * https://gist.github.com/972386
+	//  * http://stackoverflow.com/questions/4795385/how-do-you-use-bcrypt-for-hashing-passwords-in-php
+	//  * http://security.stackexchange.com/questions/4781/do-any-security-experts-recommend-bcrypt-for-password-storage/6415#6415
+	//  * http://www.codinghorror.com/blog/2012/04/speed-hashing.htm
+	//  * http://chargen.matasano.com/chargen/2007/9/7/enough-with-the-rainbow-tables-what-you-need-to-know-about-s.html
+	//  * http://en.wikipedia.org/wiki/Bcrypt
 
 	
 	const HASHING_ROUNDS = 12;
