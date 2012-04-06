@@ -1,9 +1,15 @@
 <?php namespace osms\auth\models;
 
+$role = new \osmf\Model\Builder(__NAMESPACE__ . '\Role');
+$role->addColumn('name', 'Char');
+
 
 $user = new \osmf\Model\Builder(__NAMESPACE__ . '\BaseUser', $table='osms_auth_user');
 $user->addColumn('username', 'Char');
 $user->addColumn('password_hash', 'Char');
+$user->addColumn('role', 'ForeignKey', array(
+	'type' => __NAMESPACE__ . '\Role',
+));
 
 
 class User extends BaseUser implements \osmf\Auth\IUserModel
@@ -26,7 +32,7 @@ class User extends BaseUser implements \osmf\Auth\IUserModel
 
 	public function getRole()
 	{
-		return 'cro';
+		return $this->role->name;
 	}
 
 	protected function hash($input)
