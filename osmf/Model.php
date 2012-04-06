@@ -23,7 +23,12 @@ abstract class Model
 		if (array_key_exists($name, $this->values)) {
 			return $this->values[$name];
 		} else {
-			return \array_get($this->loadedValues, $name, NULL);
+			// TODO: Cache it, allow saving, modify save code,... this is only a preliminary support
+			if ($this->fields[$name] instanceof Model\Field\ForeignKey) {
+				return $this->fields[$name]->get($this->loadedValues[$name]);
+			} else {
+				return \array_get($this->loadedValues, $name, NULL);
+			}
 		}
 	}
 
