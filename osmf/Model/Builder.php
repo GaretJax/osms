@@ -13,8 +13,8 @@ class Builder
 		$this->addColumn('id', 'PrimaryKey');
 
 		if ($table === NULL) {
-			$components = explode('\\', $namespace);
-			array_push($components, $name);
+			$components = explode('\\', $name);
+			unset($components[count($components) - 2]);
 			$table = strtolower(implode('_', $components));
 		}
 		$this->table = $table;
