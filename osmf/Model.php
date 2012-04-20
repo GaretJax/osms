@@ -60,6 +60,42 @@ abstract class Model
 		$stmt->execute($values);
 	}
 
+	public static function all($dbconf=NULL)
+	{
+		$properties = static::$properties;
+		$fields = $properties['fields'];
+
+		$dbh = \osmf\Database\Driver::getInstance($dbconf);
+		$stmt = $dbh->prepareSelectStatement(
+			$properties['name'],
+			array(),
+			array_keys($properties['fields'])
+		);
+
+		//$stmt->debugDumpParams();
+		$stmt->execute();
+
+		if ($stmt->rowCount() === 0) {
+			throw new Model\ObjectNotFound('Object not found');
+		}
+
+		$instances = array();
+
+		foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $dataobj) {
+			$instance = new static();
+			$instance->loadedValues = $dataobj;
+			$instances[] = $instance;
+		}
+		/*
+		$dataobj = $stmt->fetch(\PDO::FETCH_LAZY);
+
+		$model = new static();
+		$model->loadedValues = $dataobj;
+		return $model;
+		 */
+		return $instances;
+	}
+
 	public static function get($query, $dbconf=NULL)
 	{
 		if (!is_array($query)) {
@@ -78,6 +114,8 @@ abstract class Model
 			array_keys($properties['fields'])
 		);
 
+		//$stmt->debugDumpParams();
+		//var_dump($query);
 		$stmt->execute($query);
 
 		if ($stmt->rowCount() === 0) {
@@ -86,7 +124,7 @@ abstract class Model
 			throw new \Exception('Multiple results returned');
 		}
 
-		$dataobj = $stmt->fetch(\PDO::FETCH_LAZY);
+		$dataobj = $stmt->fetch(\PDO::FETCH_ASSOC);
 
 		$model = new static();
 		$model->loadedValues = $dataobj;
