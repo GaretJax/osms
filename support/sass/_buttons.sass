@@ -1,0 +1,197 @@
+$font-actions: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Geneva", "Verdana", "sans-serif"
+
+.title-buttons
+	text-align: right
+	margin-top: -4.35em
+	margin-bottom: 2.4em
+
+.button, button, .button:visited
+	+border-radius(3px)
+	+box-sizing(border-box)
+	background: #fff
+	border: 1px solid #fff
+	@include background-image(linear-gradient(#eeeeee, #dddddd))
+	text-shadow: 0 1px 0 #fff
+	line-height: 1.9em
+	padding: .05em 1em .05em 1em
+	margin: 2px
+	display: inline-block
+	font-weight: bold
+	color: #5a5a5a
+	font-size: 1em
+	font-family: $font-actions
+	position: relative
+	cursor: pointer
+	text-align: center
+	text-decoration: none
+	-moz-appearance: none
+	-webkit-user-focus: ignore
+	-moz-user-focus: ignore
+	user-focus: ignore
+
+	&::-moz-focus-inner
+		border: 0
+		padding: 0
+
+	&.small
+		font-size: .9em
+		line-height: 1.8em
+
+	&:before
+		content: ""
+		display: block
+		+border-radius(4px)
+		+box-sizing(border-box)
+		+box-shadow(1px 1px 1px #e3e3e3)
+		border: 1px solid #C6C6C6
+		position: absolute
+		left: -2px
+		right: -2px
+		top: -2px
+		bottom: -2px
+
+	&:hover, &:focus
+		text-decoration: none
+		@include background-image(linear-gradient(#eeeeee, #c8c8c8))
+
+		&:before
+			border: 1px solid #aaa
+	
+	&:active
+		@include background-image(linear-gradient(#dddddd, #eeeeee))
+		color: #777
+		text-shadow: 0 -1px 0 #fff
+
+	&.negative
+		@include background-image(linear-gradient(#fdc3c5, #e28588))
+		text-shadow: 0 1px 0 #ffbbbc
+		color: #9b4d4f
+
+		&:before
+			border-color: #C98F90
+
+		&:hover, &:focus
+			text-decoration: none
+
+			&:before
+				border-color: #cb7b7c
+
+			color: #8d3d3f
+			text-shadow: 0 1px 0 #ffa6a7
+			@include background-image(linear-gradient(#fdb5b7, #d57c7f))
+		
+		&:active
+			color: #b0575a
+			text-shadow: 0 -1px 0 #ffabac
+			@include background-image(linear-gradient(#e28588, #fdc3c5))
+
+	&[disabled], &.disabled
+		opacity: 0.8
+		cursor: default
+
+		&:hover, &:active, &:focus
+			color: #5a5a5a
+			@include background-image(linear-gradient(#eeeeee, #dddddd))
+
+			&:before
+				border: 1px solid #C6C6C6 !important
+
+		&.negative:hover
+			@include background-image(linear-gradient(#fdc3c5, #e28588))
+			color: #9b4d4f
+
+			&:before
+				border: 1px solid #C98F90 !important
+
+
+.chooser
+	border-bottom: 1px solid transparent
+	display: inline-block
+	position: relative
+	width: 150px
+	margin: 0 0 -1px 0
+
+	legend
+		display: none
+
+	&.open
+		border-bottom-color: #c6c6c6
+		margin-bottom: 0
+
+		button
+			+border-bottom-radius(0px)
+			border-bottom: 0
+			padding-bottom: 0
+
+			&:hover
+				border-color: #c6c6c6
+
+			span
+				+border-bottom-radius(0px)
+				@include background-image(linear-gradient(#eeeeee, #c8c8c8))
+				padding-bottom: 0.1em
+
+		ol
+			display: block
+
+	button
+		margin: 0
+		vertical-align: -1px
+		margin-bottom: -1px
+
+		span:after
+			content: " ▾"
+
+	ol
+		top: 100%
+		+box-sizing(border-box)
+		+border-bottom-radius(4px)
+		width: 100%
+		position: absolute
+		+box-shadow(1px 1px 1px #eee)
+		background: #eee
+		display: none
+		border: 1px solid #c6c6c6
+		border-top: 0
+		margin-top: 1px
+
+		li
+			border-left: 1px solid #fff
+			border-right: 1px solid #fff
+			border-top: 1px solid rgba(255, 255, 255, .5)
+
+		li:first-child
+			border-top: 1px solid #fff
+
+		li:last-child
+			border-bottom: 1px solid #fff
+			+border-bottom-radius(4px)
+
+		label
+			text-align: left
+			padding: .4em .5em
+			margin: 0
+			width: auto
+			display: block
+			color: #333
+			font-size: .9em
+			text-decoration: none
+
+			&:hover
+				background: rgba(128, 128, 128, .1)
+
+		input
+			display: none
+
+		input + label:before
+			content: "✓"
+			padding: 0 .48em 0 .3em
+			text-align: center
+			visibility: hidden
+
+		input:checked + label:before
+			visibility: visible
+
+
+
+
