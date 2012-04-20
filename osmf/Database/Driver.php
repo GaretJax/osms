@@ -48,7 +48,10 @@ class Driver
 		$query = implode(' AND ', $query);
 		$fields = implode(', ', $fields);
 
-		$sql = sprintf('SELECT %s FROM %s WHERE %s', $fields, $table, $query);
+		$sql = sprintf('SELECT %s FROM %s', $fields, $table);
+		if ($query) {
+			$sql .= sprintf(' WHERE %s', $query);
+		}
 		return $this->dbh->prepare($sql);
 	}
 
