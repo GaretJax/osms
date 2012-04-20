@@ -3,9 +3,9 @@
 
 class DirectToTemplate extends \osmf\View
 {
-	public function __construct($parameters, $context=NULL)
+	public function __construct($dispatcher, $parameters, $context=NULL)
 	{
-		parent::__construct($parameters);
+		parent::__construct($dispatcher, $parameters);
 
 		if (!is_null($context)) {
 			$this->context = (object) $context;

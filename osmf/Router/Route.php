@@ -29,10 +29,10 @@ class Route
 		throw new \Exception('Permission denied');
 	}
 
-	public function getView($request)
+	public function getView($dispatcher, $request)
 	{
 		$this->checkPermissions($request->user);
-		return new $this->view($this->parameters);
+		return new $this->view($dispatcher, $this->parameters);
 	}
 
 	public function getArgs()

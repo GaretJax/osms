@@ -4,18 +4,21 @@
 class View
 {
 	protected $context;
+	protected $dispatcher;
 	private $request;
 	protected $parameters;
 
-	public function __construct($parameters)
+	public function __construct($dispatcher, $parameters)
 	{
-		$this->initContext();
+		$this->dispatcher = $dispatcher;
 		$this->parameters = $parameters;
+		$this->initContext();
 	}
 
 	protected function initContext()
 	{
 		$this->context = new \stdClass();
+		$this->context->_dispatcher = $this->dispatcher;
 	}
 
 	public function render($request, $args)
@@ -25,6 +28,12 @@ class View
 		$response = $this->$func($request, $args);
 		$this->request = NULL;
 		return $response;
+	}
+
+	protected function reverse($name, $args=array())
+	{
+		$url = $this->dispatcher->getRouter()->reverse($name, $args);
+		return \join_paths(\osmf\Config::get('base_url'), $url);
 	}
 
 	protected function redirect($url)

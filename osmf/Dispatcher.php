@@ -21,6 +21,11 @@ class Dispatcher
 		}
 	}
 
+	public function getRouter()
+	{
+		return $this->router;
+	}
+
 	protected function getUrl()
 	{
 		if (!array_key_exists('PATH_INFO', $_SERVER)) {
@@ -129,7 +134,7 @@ class Dispatcher
 			if ($response === NULL) {
 				// No errors where thrown in the previous phase, continue with
 				// normal rendering flow
-				$view = $route->getView($request);
+				$view = $route->getView($this, $request);
 
 				$response = $this->process_middlewares(
 					'view', array($request, $view),
@@ -168,7 +173,12 @@ class Dispatcher
 
 			return $response;
 		} catch (\Exception $e) {
-			$view = new Views\DirectToTemplate(array(
+			// TODO: Count them!
+			while (ob_get_level() > 1) {
+				ob_end_clean();
+			}
+
+			$view = new Views\DirectToTemplate($this, array(
 				'template' => Config::get('debug') ? '500-debug.html' : '500.html',
 				'response_class' => '\osmf\Http\Response\ServerError',
 			), array(

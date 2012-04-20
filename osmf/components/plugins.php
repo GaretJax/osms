@@ -75,3 +75,19 @@ class BacktracePlugin extends \osmf\Template\Plugin
 	}
 }
 $template->registerPlugin(new BacktracePlugin());
+
+
+class UrlReversingPlugin extends \osmf\Template\Plugin
+{
+	protected $name = 'url';
+
+	public function render($template, $context, $args)
+	{
+		$name = $args[0];
+		$param = \array_get($args, 1, array());
+		$url = $context->_dispatcher->getRouter()->reverse($name, $param);
+
+		echo \join_paths(\osmf\Config::get('base_url'), $url);
+	}
+}
+$template->registerPlugin(new UrlReversingPlugin());
