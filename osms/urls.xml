@@ -1,5 +1,15 @@
 <?xml version="1.0" ?>
 <routes>
+
+	<!--
+		Roles:
+		 *: Match all roles
+		 anonymous: Match anonymous user
+		 <role-name>: Match specific role name
+	-->
+
+
+	<!-- Base URLs -->
 	<route name="index" pattern="^/$">
 		<view name="osmf.DirectToTemplate">
 			<param name="template" value="index.html"/>
@@ -7,6 +17,8 @@
 		<grant role="*" />
 	</route>
 
+
+	<!-- User management URLs -->
 	<route name="login" pattern="^/login/$">
 		<view name="auth.Login"/>
 		<grant role="*" />
@@ -15,5 +27,59 @@
 	<route name="logout" pattern="^/logout/$">
 		<view name="auth.Logout"/>
 		<grant role="*" />
+	</route>
+
+	<route name="manage-users" pattern="^/users/$">
+		<!-- TODO -->
+		<view name="auth.ListUsers"/>
+		<grant role="admin" />
+	</route>
+
+	<route name="add-user" pattern="^/users/add/$">
+		<!-- TODO -->
+		<view name="auth.AddUser"/>
+		<grant role="admin" />
+	</route>
+
+	<route name="change-password" pattern="^/change-password/$">
+		<view name="auth.ChangePassword"/>
+		<grant role="admin" />
+		<grant role="cro" />
+		<grant role="customer" />
+	</route>
+
+
+	<!-- Auditing URLs -->
+	<route name="logs" pattern="^/logs/$">
+		<!-- TODO -->
+		<view name="audit.ViewLogs"/>
+		<grant role="admin" />
+	</route>
+
+
+	<!-- Message management URLs -->
+	<route name="inbox" pattern="^/messages/$">
+		<!-- TODO -->
+		<view name="messages.Inbox"/>
+		<grant role="cro" />
+		<grant role="customer" />
+	</route>
+
+	<route name="new-message" pattern="^/messages/create/$">
+		<!-- TODO -->
+		<view name="messages.Create"/>
+		<grant role="customer" />
+	</route>
+
+	<route name="archive" pattern="^/messages/archived/$">
+		<!-- TODO -->
+		<view name="messages.Archive"/>
+		<grant role="customer" />
+	</route>
+
+	<route name="delete-message" pattern="^/messages/delete/$">
+		<!-- TODO -->
+		<view name="messages.Delete"/>
+		<grant role="admin" />
 	</route>
 </routes>
