@@ -6,3 +6,4 @@ Gemfile.lock
 *.css
 *.js
 /info.php
+htdocs/images/icons
