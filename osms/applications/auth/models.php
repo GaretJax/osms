@@ -2,6 +2,7 @@
 
 $role = new \osmf\Model\Builder(__NAMESPACE__ . '\Role');
 $role->addColumn('name', 'Char');
+$role->addColumn('display_name', 'Char');
 
 
 $user = new \osmf\Model\Builder(__NAMESPACE__ . '\BaseUser', $table='osms_auth_user');

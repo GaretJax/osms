@@ -3,9 +3,11 @@
 
 class AnonymousUser
 {
+	const ROLE = "anonymous";
+
 	public function getRole()
 	{
-		return NULL;
+		return AnonymousUser::ROLE;
 	}
 }
 
@@ -27,6 +29,11 @@ class User
 			$this->is_authenticated = FALSE;
 			$this->model = new AnonymousUser();
 		}
+	}
+
+	public function checkPassword($password)
+	{
+		return $this->model->checkPassword($password);
 	}
 
 	public function checkLoginAs($model, $password)
@@ -53,6 +60,12 @@ class User
 	public function isAuthenticated()
 	{
 		return $this->is_authenticated;
+	}
+
+	public function setPassword($password)
+	{
+		$this->model->setPassword($password);
+		$this->model->save();
 	}
 
 	public function loginAs($model)

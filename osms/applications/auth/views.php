@@ -78,3 +78,45 @@ class Logout extends \osmf\View
 		return $this->redirect(\osmf\Config::get('base_url'));
 	}
 }
+
+
+class ChangePassword extends \osmf\View
+{
+	protected function render_GET($request, $args)
+	{
+		$this->context->error = FALSE;
+		$this->context->form = new forms\ChangePassword();
+
+		return $this->renderResponse('auth/change-password.html');
+	}
+
+	protected function render_POST($request, $args)
+	{
+		$form = new forms\ChangePassword($request->POST);
+
+		if ($form->isValid()) {
+			if ($form->cleaned_data['new_password_1'] === $form->cleaned_data['new_password_2']) {
+				if ($request->user->checkPassword($form->cleaned_data['old_password'])) {
+					$request->user->setPassword($form->cleaned_data['new_password_1']);
+					// TODO: Set a message for the user before redirecting
+					return $this->redirect($this->reverse('index'));
+				}
+			}
+		}
+
+		$this->context->error = TRUE;
+		$this->context->form = $form;
+
+		return $this->renderResponse('auth/change-password.html');
+	}
+}
+
+
+class ListUsers extends \osmf\View
+{
+	protected function render_GET($request, $args)
+	{
+		$this->context->users = models\User::all();
+		return $this->renderResponse('auth/list-users.html');
+	}
+}
