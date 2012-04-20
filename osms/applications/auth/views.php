@@ -3,6 +3,18 @@
 use \osms\auth\models;
 use \osms\auth\forms;
 
+/*$model = new models\User();
+$model->username = 'foo';
+$model->setPassword('bar');
+$model->save();*/
+
+/*$model->username = 'test1';
+$model->password = 'pass';
+$model->save();*/
+
+//$model->password = "pass23";
+//$model->save();
+
 
 class Login extends \osmf\View
 {
@@ -13,11 +25,6 @@ class Login extends \osmf\View
 		return $this->redirect($url);
 	}
 
-	protected function checkPermissions()
-	{
-		return True;
-	}
-
 	protected function render_GET($request, $args)
 	{
 		if ($request->user->isAuthenticated()) {
@@ -26,15 +33,6 @@ class Login extends \osmf\View
 
 		$this->context->error = FALSE;
 		$this->context->form = new forms\Login();
-
-		/*$model = new User();
-		$model->username = 'test1';
-		$model->password = 'pass';
-		$model->save();*/
-
-		/*$model = models\User::get(34);
-		$model->password = "pass23";
-		$model->save();*/
 
 		return $this->renderResponse('auth/login.html');
 	}
@@ -48,7 +46,6 @@ class Login extends \osmf\View
 		$form = new forms\Login($request->POST);
 
 		if ($form->isValid()) {
-			// TODO: Check username & password
 			try {
 				$model = models\User::get(array(
 					'username' => $form->cleaned_data['username']
@@ -59,8 +56,6 @@ class Login extends \osmf\View
 				if ($request->user->checkLoginAs($model, $password)) {
 					return $this->redirectAuthenticated();
 				}
-				//var_dump($model->username);
-				//$request->user->login();
 			} catch (\osmf\Model\ObjectNotFound $e) {
 			}
 		}

@@ -8,9 +8,9 @@
 	<h1>Welcome to the oSMS platform</h1>
 
 	<?php if ($user->isAuthenticated()): ?>
-	<p>Welcome <?php $this->p($user->getUsername()) ?> (<?php $this->p($user->getRole()) ?>)</p>
+		<p>Welcome <?php $this->p($user->getUsername()) ?> (<?php $this->p($user->getRole()) ?>)</p>
 	<?php else: ?>
-		<p>In order to use the platform you have to be logged in. You can do so on the <a href="#">login</a> page.</p>
+		<p>In order to use the platform you have to be logged in. You can do so on the <a href="<?php $this->url('login') ?>">login</a> page.</p>
 	<?php endif; ?>
 </section>
 <?php $this->endblock() ?>

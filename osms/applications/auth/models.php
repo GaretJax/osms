@@ -22,7 +22,6 @@ class User extends BaseUser implements \osmf\Auth\IUserModel
 	//  * http://chargen.matasano.com/chargen/2007/9/7/enough-with-the-rainbow-tables-what-you-need-to-know-about-s.html
 	//  * http://en.wikipedia.org/wiki/Bcrypt
 
-	
 	const HASHING_ROUNDS = 12;
 
 	public function getUserId()
