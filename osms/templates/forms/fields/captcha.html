@@ -1,0 +1,5 @@
+<p class="captcha">
+	<label for="id_<?php $this->p($ref) ?>"><?php $this->p($label) ?>:</label>
+	<input type="text" id="id_<?php $this->p($ref) ?>" size="<?php $this->p($size) ?>" name="<?php $this->p($ref) ?>" />
+	<img src="<?php $context->url('captcha') ?>?rand=<?php $this->p(rand()) ?>" />
+</p>

@@ -13,14 +13,16 @@ body
 
 body > header,
 body > section,
-body > footer
+body > footer,
+body > aside
 	margin: 1.5em auto
 	max-width: 1000px
 	min-width: 650px
 	width: 100%
 
 body > header,
-body > section
+body > section,
+body > aside
 	+box-sizing('border-box')
 	+border-radius(4px)
 	+box-shadow(1px 1px 5px rgba(0, 0, 0, .5))
@@ -59,6 +61,30 @@ body > header
 		a:hover
 			background: rgba(255, 255, 255, 0.1)
 
+body > aside
+	border-color: #e0c65f
+	background: #ffed9a
+	padding: 0.8em 0
+	+box-shadow(1px 1px 5px rgba(0, 0, 0, .1))
+
+	li
+		color: #755e18
+		font-size: 1.3em
+		line-height: 1.5em
+		padding: 0.5em 1em 0.5em 2.5em
+		background: rgba(255, 255, 255, 0.4)
+		border-bottom: 1px solid rgba(224, 198, 95, 0.8)
+		border-top: 1px solid rgba(255, 255, 255, 0.5)
+		background-image: url('../images/icons/flag_yellow.png')
+		background-repeat: no-repeat
+		background-position: 9px 45%
+
+	li:only-child
+		list-style-type: none
+
+	ul
+		border-top: 1px solid #e0c65f
+		border-bottom: 1px solid rgba(255, 255, 255, 0.5)
 
 body > section
 	+box-shadow(1px 1px 5px rgba(0, 0, 0, .1))
@@ -67,9 +93,11 @@ body > section
 	background: #fff
 	padding: 2em
 
-body > section
 	@import content
 	@import users
+	@import messages
+	@import logs
+	@import paginator
 
 body > footer
 	text-align: center

@@ -9,19 +9,19 @@
 
 abstract class Middleware
 {
-	public function process_request($request)
+	public function process_request($dispatcher, $request)
 	{
 	}
 
-	public function process_view($request, $view)
+	public function process_view($dispatcher, $request, $route, $view)
 	{
 	}
 
-	public function process_exception($request, $exception)
+	public function process_exception($dispatcher, $request, $exception)
 	{
 	}
 
-	public function process_response($response)
+	public function process_response($dispatcher, $response)
 	{
 		return $response;
 	}

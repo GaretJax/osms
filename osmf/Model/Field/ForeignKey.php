@@ -4,6 +4,7 @@
 class ForeignKey extends \osmf\Model\Field
 {
 	protected $type;
+	protected $dbconf;
 
 	public function __construct($name, $args)
 	{
@@ -12,20 +13,33 @@ class ForeignKey extends \osmf\Model\Field
 		$this->type = $args['type'];
 	}
 
-	public function get($key)
+
+
+	protected function get($key, $dbconf)
 	{
 		$model = $this->type;
-		return $model::get(array('id' => intval($key)));
+		return $model::getById($key, $dbconf);
 	}
 
-	public function toPhp($value)
+	public function toPhp($value, $dbconf)
 	{
-		return intval($value);
+		if ($value === NULL) {
+			return NULL;
+		}
+		return $this->get(intval($value), $dbconf);
 	}
 
 	public function toDb($value)
 	{
-		return strval(intval($value));
+		if ($value === NULL) {
+			return NULL;
+		}
+
+		if (is_int($value)) {
+			return $value;
+		}
+
+		return intval($value->id);
 	}
 }
 

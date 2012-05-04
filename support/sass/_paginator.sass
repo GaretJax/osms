@@ -1,0 +1,38 @@
+.paginator
+	margin: 2em 0 0 0
+	text-align: center
+
+	li
+		+border-radius(5.5px)
+		display: inline-block
+		border: 1px solid #fff
+
+	li + li
+		margin-left: 0.1em
+	
+	a, span
+		+border-radius(4.5px)
+		border: 1px solid #ddd
+		display: inline-block
+		background: #f6f6f6
+		padding: 0.2em 0.7em
+
+	li:not(:first-child):not(:last-child)
+		a, span
+			width: 1.2em
+
+	a:hover
+		border-color: rgba(31, 82, 166, .8)
+		text-decoration: none
+
+	li:not(.current) span
+		color: #666
+		opacity: 0.8
+
+	li.current
+		border-color: rgba(31, 82, 166, .8)
+
+	li.current span
+		color: #1f52a6
+		border-color: rgba(31, 82, 166, .8)
+		

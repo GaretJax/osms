@@ -1,0 +1,158 @@
+form.message
+	input
+		width: 45em
+
+table.messages
+
+	td:first-child
+		width: 34em
+		img
+			vertical-align: -20%
+			margin: 0 .1em 0 -.2em
+
+		img.attachment
+			float: right
+
+	td:nth-child(2)
+		width: 9em
+
+	td:last-child
+		width: 5em
+
+	tr.unread
+		td:first-child
+			font-weight: bold
+
+&.create-message
+	h1 span.role
+		font-weight: normal
+		font-size: .8em
+		color: #777
+		text-transform: lowercase
+		vertical-align: 1px
+
+&.read-message li form
+	button
+		margin-left: 2px
+
+article.message
+	table
+		border: 0
+		margin: 1.5em 0
+		background: #f9f9f9
+		border-top: 1px solid #e9e9e9
+		border-bottom: 1px solid #e9e9e9
+		padding: 0
+		border-collapse: collapse
+
+		td, th
+			border: 0
+
+		th
+			width: 10em
+			text-align: right
+			background: #f4f4f4
+
+		td
+			text-align: left
+			color: #000
+
+		.attachment
+			width: 5em
+			white-space: nowrap
+			padding: 2px 2em 0 2em
+			color: #888
+			text-align: right
+
+			a
+				margin-right: 1em
+
+			img
+				vertical-align: -20%
+
+	div:before, div:after
+		background: #fff
+		font-size: 0.7em
+		color: #888
+		text-align: center
+		left: 50%
+		position: absolute
+		display: inline-block
+
+	div:before
+		content: "Message start"
+		width: 7.3em
+		margin-left: -3.65em
+		top: -1.2em
+
+	div:after
+		bottom: -1.1em
+		content: "Message end"
+		width: 6.9em
+		margin-left: -3.45em
+
+	div
+		position: relative
+		min-height: 2em
+		margin: 1.5em 0
+		padding: 0 1px
+		border: 1px solid #ccc
+		border-left-width: 0
+		border-right-width: 0
+
+	& + ul
+		overflow: auto
+		margin-top: 1.8em
+		text-align: right
+
+		li:first-child
+			float: left
+
+		li
+			display: inline-block
+
+&.deletion-token
+
+	h1
+		text-align: center
+
+	h1 + p
+		margin-top: 3em
+		text-align: left
+		font-size: 1.1em
+		color: #444
+		padding: 0 10em
+		line-height: 1.7em
+
+		strong
+			color: #222
+
+
+	.token
+		text-align: center
+
+		strong
+			+box-shadow(0px 0px 8px rgba(100, 100, 100, 0.2))
+			margin-top: .6em
+			+border-radius(10px)
+			font-size: 3.5em
+			line-height: 2em
+			padding: 0 .8em
+			border: 1px solid #ccc
+			display: inline-block
+			background: #f9f9f9
+			font-weight: normal
+			color: #333
+
+		& + p
+			color: #999
+			font-size: 0.9em
+			text-align: center
+			margin-bottom: 3.5em
+
+			strong
+				color: #333
+				font-weight: normal
+
+		& + p + p
+			text-align: center

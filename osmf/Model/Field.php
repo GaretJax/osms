@@ -12,7 +12,7 @@ abstract class Field
 		$this->name = $name;
 	}
 
-	abstract public function toPhp($value);
+	abstract public function toPhp($value, $dbconf);
 
 	abstract public function toDb($value);
 }

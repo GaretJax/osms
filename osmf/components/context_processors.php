@@ -26,15 +26,10 @@ class ContextProcessors
 		);
 	}
 
-	public static function csrfToken($request)
+	public static function messaging($request)
 	{
-		// TODO: Use here a custom hash function, hint: vulnerability
-		$token = '123456';
-
-		$request->session->set('csrf_token', $token);
-
 		return array(
-			'csrf_token' => $token,
+			'message_queue' => $request->session->pop('messages', array())
 		);
 	}
 }

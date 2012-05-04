@@ -26,10 +26,22 @@ class Session
 			$count = $this->get('__count', 0) + 1;
 			if ($count > $regenerate) {
 				$this->regenerate();
-				$count = 0;
+			} else {
+				$this->set('__count', $count);
 			}
-			$this->set('__count', $count);
 		}
+
+		$last_seen = $this->get('__age', time());
+		if (time() - $last_seen > $lifetime) {
+			$this->destroy();
+		}
+
+		$this->set('__age', time());
+	}
+
+	public function getId()
+	{
+		return session_id();
 	}
 
 	public function get($name, $default=NULL)
@@ -39,6 +51,13 @@ class Session
 		} else {
 			return $default;
 		}
+	}
+
+	public function pop($name, $default=NULL)
+	{
+		$value = $this->get($name, $default);
+		$this->del($name);
+		return $value;
 	}
 
 	public function set($name, $value)
@@ -56,6 +75,7 @@ class Session
 	public function regenerate()
 	{
 		session_regenerate_id(TRUE);
+		$this->set('__count', 0);
 	}
 
 	public function destroy()
@@ -66,6 +86,8 @@ class Session
 			$params["path"], $params["domain"],
 			$params["secure"], $params["httponly"]
 		);
+
+		$_SESSION = array();
 
 		// Destroy the session
 		session_destroy();

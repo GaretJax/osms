@@ -3,7 +3,7 @@ $font-actions: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Geneva", 
 .title-buttons
 	text-align: right
 	margin-top: -4.35em
-	margin-bottom: 2.4em
+	margin-bottom: 2.3em
 
 .button, button, .button:visited
 	+border-radius(3px)
@@ -37,6 +37,52 @@ $font-actions: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Geneva", 
 		font-size: .9em
 		line-height: 1.8em
 
+	&.icon.small
+		padding-left: 26px
+
+		&:after
+			background-position: 6px 45%
+
+	&.icon
+		padding-left: 36px
+		&:after
+			content: ""
+			display: block
+			+border-radius(4px)
+			+box-sizing(border-box)
+			+box-shadow(1px 1px 1px #e3e3e3)
+			border: 1px solid #C6C6C6
+			position: absolute
+			left: -2px
+			right: -2px
+			top: -2px
+			bottom: -2px
+			background-repeat: no-repeat
+			background-position: 12px 45%
+			opacity: 0.7
+
+		&.send-new:after
+			background-image: url('../images/icons/email_add.png')
+
+
+		&.read:after
+			background-image: url('../images/icons/page_white_text.png')
+
+		&.trash:after
+			background-image: url('../images/icons/bin.png')
+
+		&.add:after
+			background-image: url('../images/icons/add.png')
+
+		&.download:after
+			background-image: url('../images/icons/page_white_put.png')
+
+		&.login:after
+			background-image: url('../images/icons/door_in.png')
+
+		&.send:after
+			background-image: url('../images/icons/email_go.png')
+
 	&:before
 		content: ""
 		display: block
@@ -56,7 +102,10 @@ $font-actions: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Geneva", 
 
 		&:before
 			border: 1px solid #aaa
-	
+
+		&:after
+			opacity: 1
+
 	&:active
 		@include background-image(linear-gradient(#dddddd, #eeeeee))
 		color: #777
@@ -79,14 +128,14 @@ $font-actions: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Geneva", 
 			color: #8d3d3f
 			text-shadow: 0 1px 0 #ffa6a7
 			@include background-image(linear-gradient(#fdb5b7, #d57c7f))
-		
+
 		&:active
 			color: #b0575a
 			text-shadow: 0 -1px 0 #ffabac
 			@include background-image(linear-gradient(#e28588, #fdc3c5))
 
 	&[disabled], &.disabled
-		opacity: 0.8
+		opacity: 0.5
 		cursor: default
 
 		&:hover, &:active, &:focus
@@ -191,7 +240,4 @@ $font-actions: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Geneva", 
 
 		input:checked + label:before
 			visibility: visible
-
-
-
 

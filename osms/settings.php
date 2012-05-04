@@ -13,6 +13,8 @@ $config->debug = TRUE;
  */
 $config->installed_apps = array(
 	'auth',
+	'messaging',
+	'logging',
 );
 
 /**
@@ -40,8 +42,8 @@ $config->middleware_classes = array(
 $config->context_processors = array(
 	'\osmf\ContextProcessors::auth',
 	'\osmf\ContextProcessors::config',
-	'\osmf\ContextProcessors::csrfToken',
 	'\osmf\ContextProcessors::request',
+	'\osmf\ContextProcessors::messaging',
 );
 
 /**
@@ -71,10 +73,9 @@ $config->urlconf = __DIR__ . DIRECTORY_SEPARATOR . 'urls.xml';
 $config->base_url = '/~garetjax/osms-root/htdocs/';
 
 /**
- * Path to which a user should be redirected after login.
- * The 'base_url' will be automatically preprended to this value.
+ * Name of the url to which a user should be redirected after login.
  */
-$config->login_redirect_url = '';
+$config->login_redirect_url = 'index';
 
 /**
  * Define here the database connection settings. The first entry in
@@ -89,19 +90,49 @@ $config->databases = array(
 		'user' => 'osms',
 		'pass' => '123456osms',
 	),
+	'admin' => array(
+		'type' => 'pgsql',
+		'host' => '127.0.0.1',
+		'name' => 'osms',
+		'user' => 'osms_admin',
+		'pass' => '123456',
+	),
 );
 
 /**
  * The model to use for retrieving user data.
  */
 $config->user_model = '\osms\auth\models\User';
+$config->user_dbconf = 'admin';
 
 /**
  * Session management setup
  */
 $config->session = array(
 	'name' => 'session',
-	'lifetime' => 60 * 60 * 24 * 7, // 1 week
+	'lifetime' => 60 * 60, // 1 hour
 	'regenerate' => 10, // Number of requests before a new session
 	                    // ID is generated. Set to 0 to disable.
 );
+
+/**
+ * Directory where uploaded attachments have to be saved.
+ */
+$config->upload_dir = __DIR__ . DIRECTORY_SEPARATOR . 'uploads';
+
+
+$config->log_dir = __DIR__ . DIRECTORY_SEPARATOR . 'logs';
+$config->log_severity = 'INFO';
+
+$config->captcha = array(
+	'resources_path' => __DIR__ . DIRECTORY_SEPARATOR . 'captcha',
+);
+
+/**
+ * Minimum interval between two messages from the same user.
+ * Maximum is 23h59
+ */
+$config->message_flood_limit = 60;
+
+
+$config->messages_per_page = 10;

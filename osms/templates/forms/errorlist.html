@@ -1,7 +1,10 @@
-<?php if ($errors): ?>
+<?php if ($errors or $form_errors): ?>
 <ul>
+<?php foreach ($form_errors as $error): ?>
+	<li><?php $this->p($error->getMessage()) ?></li>
+<?php endforeach; ?>
 <?php foreach ($errors as $label => $error): ?>
-	<li><?php $this->p($label) ?>: <?php $this->p($error->getMessage()) ?></li>
+	<li><?php $this->p($error->label) ?>: <?php $this->p($error->getMessage()) ?></li>
 <?php endforeach; ?>
 </ul>
 <?php endif ?>

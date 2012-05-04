@@ -1,0 +1,8 @@
+<p>
+	<label for="id_<?php $this->p($ref) ?>"><?php $this->p($label) ?>:</label>
+	<select id="id_<?php $this->p($ref) ?>" name="<?php $this->p($ref) ?>"<?php if (!$choices): ?> disabled="disabled"<?php endif ?>>
+		<?php foreach ($choices as $ref => $label): ?>
+		<option <?php if ($ref === $value): ?>selected="selected" <?php endif ?>value="<?php $this->p($ref) ?>"><?php $this->p($label) ?></option>
+		<?php endforeach ?>
+	</select>
+</p>

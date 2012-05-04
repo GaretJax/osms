@@ -1,0 +1,30 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Confirm message archivation') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section class="confirmation">
+	<h1>Confirm message archivation</h1>
+
+	<p>Are you sure you want to archive the message with the subject
+	<strong><?php $this->p($message->subject) ?></strong> which you received from
+	<strong><?php $this->p($message->sender->username) ?></strong> on
+	<strong><?php $this->p($message->timestamp->format('M d, Y')) ?></strong> at
+	<strong><?php $this->p($message->timestamp->format('H:i:s')) ?></strong><?php if ($delete_attachment): ?>
+	and to delete the attachment named
+	<strong><?php $this->p($message->attachment->getBasename()) ?></strong><?php endif ?>?</p>
+
+	<form method="post">
+		<?php $this->csrfToken(); ?>
+		<p>
+		<a class="button" href="<?php $this->url('read-message', array('id' => $message->id)) ?>">No, cancel and go back</a>
+			<?php if($delete_attachment): ?>
+			<button type="submit" class="negative">Yes, delete attachments and archive it</button>
+			<?php else: ?>
+			<button type="submit" class="negative">Yes, archive it</button>
+			<?php endif ?>
+		</p>
+	</form>
+</section>
+<?php $this->endblock() ?>

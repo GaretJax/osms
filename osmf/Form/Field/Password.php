@@ -5,7 +5,7 @@ class Password extends Char
 {
 	protected $type = 'password';
 
-	public function render($value=NULL)
+	public function render($value=NULL, $template=NULL)
 	{
 		return parent::render();
 	}

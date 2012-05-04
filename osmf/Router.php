@@ -5,13 +5,19 @@ class Router
 {
 	private $routes = array();
 	private $app_root = '';
+	private $logger;
 
 	public function __construct($app_root)
 	{
 		$this->app_root = $app_root;
 	}
 
-	public function addRoute($name, $pattern, $view, $grants, $parameters=array())
+	public function setLogger($logger)
+	{
+		$this->logger = $logger;
+	}
+
+	public function addRoute($name, $pattern, $view, $grants, $parameters, $definition)
 	{
 		$pattern = '%' . $pattern . '%';
 
@@ -23,6 +29,7 @@ class Router
 			'view' => $view[1],
 			'grants' => $grants,
 			'parameters' => $parameters,
+			'def' => $definition,
 		);
 	}
 
@@ -49,7 +56,8 @@ class Router
 				strval($route['pattern']),
 				strval($route->view[0]['name']),
 				$grants,
-				$params
+				$params,
+				$route
 			);
 		}
 	}
@@ -67,8 +75,9 @@ class Router
 		$pattern = rtrim($pattern, '$');
 
 		if ($args) {
-			// TODO: Replace groups with args
-			throw new \Exception('Groups not yet implemented');
+			foreach ($args as $key => $val) {
+				$pattern = preg_replace("%\(\?'$key'([^\)]+)\)%e", "\osmf\substitute('$1', '$val')", $pattern);
+			}
 		}
 
 		return $pattern;
@@ -93,10 +102,23 @@ class Router
 					}
 				}
 
-				return new Router\Route($view, $matches, $spec['grants'], $spec['parameters']);
+				$this->logger->logInfo("Request for $pathinfo routed to $view");
+				return new Router\Route($this->logger, $view, $matches, $spec['grants'], $spec['parameters'], $spec['def']);
 			}
 		}
 
+		$this->logger->logError("No match found for url $pathinfo");
 		throw new Http\Error\Http404("Page not found");
 	}
+}
+
+function substitute($pattern, $val)
+{
+	$pattern = "%^$pattern$%";
+
+	if (!preg_match($pattern, $val)) {
+		throw new \Exception("Invalid subsitution");
+	}
+
+	return $val;
 }

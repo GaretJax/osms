@@ -5,13 +5,15 @@ class View
 {
 	protected $context;
 	protected $dispatcher;
+	protected $logger;
 	private $request;
 	protected $parameters;
 
-	public function __construct($dispatcher, $parameters)
+	public function __construct($dispatcher, $logger, $parameters)
 	{
 		$this->dispatcher = $dispatcher;
 		$this->parameters = $parameters;
+		$this->logger = $logger;
 		$this->initContext();
 	}
 
@@ -23,12 +25,25 @@ class View
 
 	public function render($request, $args)
 	{
+		$this->logger->logInfo("Rendering $request->method request for " . get_class($this));
+
+		$this->preRender();
+
 		$this->request = $request;
 		$func = 'render_' . $request->method;
 		$response = $this->$func($request, $args);
 		$this->request = NULL;
+
+		$this->postRender();
+
 		return $response;
 	}
+
+	protected function preRender()
+	{}
+
+	protected function postRender()
+	{}
 
 	protected function reverse($name, $args=array())
 	{
@@ -39,6 +54,13 @@ class View
 	protected function redirect($url)
 	{
 		return new Http\Response\Redirect($url);
+	}
+
+	protected function message($message)
+	{
+		$messages = $this->request->session->get('messages', array());
+		array_push($messages, $message);
+		$this->request->session->set('messages', $messages);
 	}
 
 	protected function renderResponse($template, $response_class=NULL)
@@ -67,11 +89,13 @@ class View
 
 	protected function render_GET($request, $args)
 	{
-		throw new \Exception("Method not allowed");
+		$this->logger->logInfo("Method GET not allowed");
+		throw new \Exception("Method GET not allowed");
 	}
 
 	protected function render_POST($request, $args)
 	{
-		throw new \Exception("Method not allowed");
+		$this->logger->logInfo("Method POST not allowed");
+		throw new \Exception("Method POST not allowed");
 	}
 }

@@ -1,0 +1,39 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Archive') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section>
+	<h1>Archived messges</h1>
+
+	<?php if ($messages): ?>
+		<table class="messages">
+			<tr>
+				<th>Subject</th>
+				<th>Sender</th>
+				<th colspan="2">Date and time</th>
+			</tr>
+
+			<?php foreach ($messages as $msg): ?>
+			<tr class="<?php $this->p($msg->status) ?>">
+				<td>
+					<?php $this->p($msg->subject) ?>
+					<?php if ($msg->attachment): ?>
+					<img class="attachment" src="<?php $this->p($config->base_url); ?>images/icons/attach.png" alt="Attachment" title="Message has an attachment" />
+					<?php endif ?>
+				</td>
+				<td><?php $this->p($msg->sender->username) ?></td>
+				<td><?php $this->p($msg->timestamp->format('F d, Y – H:i:s')) ?></td>
+				<td><a class="button small icon read" href="<?php $this->url('read-message', array('id' => $msg->id)) ?>">Read</a></td>
+			</tr>
+			<?php endforeach ?>
+		</table>
+	<?php else: ?>
+		<p class="message info">You don't have any archived messages yet.</p>
+	<?php endif ?>
+
+	<?php $this->inc('paginator.html') ?>
+</section>
+<?php $this->endblock() ?>
+

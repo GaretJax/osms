@@ -7,7 +7,6 @@ abstract class Field
 	protected $required;
 	protected $args;
 	protected $ref;
-	protected $type;
 
 	public function __construct($ref, $args=array())
 	{
@@ -21,13 +20,39 @@ abstract class Field
 		}
 	}
 
-	public function clean($value)
+	public function setArg($name, $value)
 	{
+		$this->args[$name] = $value;
+	}
+
+	public function getLabel()
+	{
+		return $this->label;
+	}
+
+	public function clean($form, $value)
+	{
+		$value = trim($value);
+
 		if ($this->required && ($value === NULL || strlen($value) === 0)) {
-			throw new ValidationError('This field is required.');
+			throw new \osmf\Validator\ValidationError('This field is required');
 		}
+
+		$validators = array(
+			new \osmf\Validator\Length(
+				\array_get($this->args, 'minlength', 0),
+				\array_get($this->args, 'maxlength', PHP_INT_MAX)
+			),
+		);
+
+		$validator = new \osmf\Validator\Composite(array_merge(
+			$validators,
+			\array_get($this->args, 'validators', array())
+		));
+		$validator->assertValid($value);
+
 		return $value;
 	}
 
-	abstract public function render();
+	abstract public function render($value=NULL, $template=NULL);
 }

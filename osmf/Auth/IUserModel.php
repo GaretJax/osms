@@ -3,8 +3,11 @@
 
 interface IUserModel
 {
-	public function getRole();
+	public function getRoleName();
 	public function getUserId();
 	public function getUsername();
-	public static function get($query, $dbconf=NULL);
+	public function checkPassword($password);
+	public function setPassword($password);
+	public function isEnabled();
+	public static function getEnabledById($userid, $dbconf);
 }

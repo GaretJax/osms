@@ -1,0 +1,39 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Create a new message') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section class="create-message">
+		<?php if (isset($prev)): ?>
+		<h1>Reply to a message from <?php $this->p($prev->sender->username) ?> <span class="role">(<?php $this->p($prev->sender->role->display_name) ?>)</span></h1>
+		<?php else: ?>
+		<h1>Send a new message to <?php $this->p($user->getModel()->cro->username) ?> <span class="role">(<?php $this->p($user->getModel()->cro->role->display_name) ?>)</span></h1>
+		<?php endif ?>
+
+		<?php if ($flood): ?>
+		<p class="error">Not enough time is passed since the last message you sent. Please wait at least <?php $this->p($config->message_flood_limit) ?> seconds before sending another message.</p>
+		<?php elseif ($error): ?>
+		<div class="errorlist">
+			<p>Some errors occurred during the validation:</p>
+			<?php echo $form->errorlist(); ?>
+		</div>
+		<?php endif; ?>
+
+		<form method="post" class="message" enctype="multipart/form-data">
+			<?php $this->r($this->csrfToken()) ?>
+			<?php if (isset($prev)): ?>
+			<p>
+				<label>Subject:</label>
+				<span><?php $this->p($subject) ?></span>
+			</p>
+			<?php else: ?>
+			<?php $this->r($form->renderField('subject')) ?>
+			<?php endif ?>
+			<?php $this->r($form->renderField('body')) ?>
+			<?php $this->r($form->renderField('attachment')) ?>
+			<button type="reset">Cancel</button>
+			<button type="submit" class="icon send">Send</button>
+		</form>
+	</section>
+<?php $this->endblock() ?>

@@ -1,0 +1,23 @@
+<?php if ($paginator->getPageCount() > 1): ?>
+<ul class="paginator">
+	<?php if ($page > 1): ?>
+	<li><a href="?page=<?php $this->p($page - 1) ?>">&larr; Prev</a></li>
+	<?php else: ?>
+	<li><span>&larr; Prev</span></li>
+	<?php endif ?>
+
+	<?php for ($i=0; $i<$paginator->getPageCount(); $i++): ?>
+		<?php if ($i+1 == $page): ?>
+		<li class="current"><span><?php $this->p($i+1) ?></span></li>
+		<?php else: ?>
+		<li><a href="?page=<?php $this->p($i+1) ?>"><?php $this->p($i+1) ?></a></li>
+		<?php endif ?>
+	<?php endfor ?>
+
+	<?php if ($page < $paginator->getPageCount()): ?>
+	<li><a href="?page=<?php $this->p($page + 1) ?>">Next &rarr;</a></li>
+	<?php else: ?>
+	<li><span>Next &rarr;</span></li>
+	<?php endif ?>
+</ul>
+<?php endif ?>

@@ -52,6 +52,7 @@ ini_set('display_errors', intval(Config::get('debug')));
 
 // Load commonly used library contributions
 require_once 'osmf/common.php';
+require_once 'osmf/components/validators.php';
 require_once 'osmf/components/middlewares.php';
 require_once 'osmf/components/template_loaders.php';
 require_once 'osmf/components/context_processors.php';

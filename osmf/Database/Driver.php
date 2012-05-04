@@ -38,20 +38,24 @@ class Driver
 		return Driver::$instances[$confname];
 	}
 
-	public function prepareSelectStatement($table, $query, $fields)
+	public function beginTransaction()
 	{
-		$query = array_map(
-			create_function('$val', 'return sprintf("%s=:%s", $val, $val);'),
-			$query
-		);
+		return $this->dbh->beginTransaction();
+	}
 
-		$query = implode(' AND ', $query);
-		$fields = implode(', ', $fields);
+	public function commit()
+	{
+		return $this->dbh->commit();
+	}
 
-		$sql = sprintf('SELECT %s FROM %s', $fields, $table);
-		if ($query) {
-			$sql .= sprintf(' WHERE %s', $query);
-		}
+	public function rollback()
+	{
+		return $this->dbh->rollback();
+	}
+
+
+	public function prepareStatement($sql)
+	{
 		return $this->dbh->prepare($sql);
 	}
 
@@ -86,5 +90,25 @@ class Driver
 
 		$sql = sprintf('UPDATE %s SET %s WHERE %s', $table, $fields, $query);
 		return $this->dbh->prepare($sql);
+	}
+
+	public function prepareDeleteStatement($table, $query)
+	{
+		$query = array_map(
+			create_function('$val', 'return sprintf("%s=:%s", $val, $val);'),
+			$query
+		);
+
+		$query = implode(' AND ', $query);
+
+		$sql = sprintf('DELETE FROM %s WHERE %s', $table, $query);
+		return $this->dbh->prepare($sql);
+	}
+
+	public function lastInsertId($table, $field='id')
+	{
+		// TODO: Check this on mysql
+		$seq = implode('_', array($table, $field, 'seq'));
+		return intval($this->dbh->lastInsertId($seq));
 	}
 }

@@ -5,12 +5,49 @@ $role->addColumn('name', 'Char');
 $role->addColumn('display_name', 'Char');
 
 
+$attempt = new \osmf\Model\Builder(__NAMESPACE__ . '\BaseAttempt', $table='osms_auth_loginattempt');
+$attempt->addColumn('ip', 'IPAddress');
+$attempt->addColumn('attempts', 'Integer');
+
+
+class LoginAttempt extends BaseAttempt
+{
+	public static function getOrCreate($ipaddress=NULL)
+	{
+		if ($ipaddress === NULL) {
+			$ipaddress = $_SERVER['REMOTE_ADDR'];
+		}
+
+		try {
+			$query = static::query();
+			return $query->where('ip', 'eq', $ipaddress)->one();
+		} catch (\osmf\Model\ObjectNotFound $e) {
+			$model = new static();
+			$model->ip = $ipaddress;
+			$model->attempts = 0;
+			$model->save();
+			return $model;
+		}
+	}
+
+	public function inc()
+	{
+		$this->attempts += 1;
+		$this->save();
+	}
+}
+
+
 $user = new \osmf\Model\Builder(__NAMESPACE__ . '\BaseUser', $table='osms_auth_user');
 $user->addColumn('username', 'Char');
 $user->addColumn('password_hash', 'Char');
 $user->addColumn('role', 'ForeignKey', array(
 	'type' => __NAMESPACE__ . '\Role',
 ));
+$user->addColumn('cro', 'ForeignKey', array(
+	'type' => __NAMESPACE__ . '\User',
+));
+$user->addColumn('enabled', 'Boolean');
 
 
 class User extends BaseUser implements \osmf\Auth\IUserModel
@@ -30,14 +67,27 @@ class User extends BaseUser implements \osmf\Auth\IUserModel
 		return $this->id;
 	}
 
-	public function getUsername()
+	public function isEnabled()
 	{
-		return $this->username;
+		return $this->enabled;
 	}
 
-	public function getRole()
+	public static function getEnabledById($userid, $dbconf=NULL, $enabled=TRUE)
 	{
-		return $this->role->name;
+		return static::query($dbconf)
+			->where('id', 'eq', $userid)
+			->and('enabled', 'eq', $enabled)
+			->one();
+	}
+
+	public function getUsername()
+	{
+		return $this->_getProperty('username');
+	}
+
+	public function getRoleName()
+	{
+		return $this->_getProperty('role')->name;
 	}
 
 	protected function hash($input)
@@ -55,10 +105,7 @@ class User extends BaseUser implements \osmf\Auth\IUserModel
 
 	protected function getRandomBytes($count)
 	{
-		$hrand = fopen('/dev/urandom', 'rb');
-		$bytes = fread($hrand, $count);
-		fclose($hrand);
-		return $bytes;
+		return openssl_random_pseudo_bytes($count);
     }
 
 	public function setPassword($password)
@@ -66,25 +113,9 @@ class User extends BaseUser implements \osmf\Auth\IUserModel
 		$this->password_hash = $this->hash($password);
 	}
 
-	protected function const_strcmp($str1, $str2)
-	{
-		// TODO: Check this (review!)
-		if (strlen($str1) != strlen($str2)) {
-			return FALSE;
-		}
-
-		$result = 0;
-
-		for ($i = 0; $i < strlen($str1); $i++) {
-			$result |= ord($str1[$i]) ^ ord($str2[$i]);
-		}
-
-		return 0 === $result;
-	}
-
 	public function checkPassword($password)
 	{
 		$hash = crypt($password, $this->password_hash);
-		return $this->const_strcmp($hash, $this->password_hash);
+		return \const_strcmp($hash, $this->password_hash);
 	}
 }

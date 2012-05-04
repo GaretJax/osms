@@ -1,0 +1,31 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Log files') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section>
+	<h1>Log files</h1>
+
+	<table class="logs">
+		<tr>
+			<th>File name</th>
+			<th>Events</th>
+			<th>Size</th>
+			<th colspan="2">Last modification</th>
+		</tr>
+
+		<?php foreach ($log_files as $file): ?>
+		<tr>
+			<td><?php $this->p($file->getBasename()) ?></td>
+			<td><?php $this->p($file->countLines()) ?></td>
+			<td><?php $this->p($this->bytes2human($file->getSize())) ?></td>
+			<td><?php $this->p($file->getMTime()->format('Y/m/d H:i:s')) ?></td>
+			<td><a href="<?php $this->url('log-file', array('name' => $file->getBasename())) ?>" class="button small icon download">Download</a></td>
+		</tr>
+		<?php endforeach ?>
+	</table>
+
+</section>
+<?php $this->endblock() ?>
+

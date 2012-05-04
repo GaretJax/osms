@@ -17,6 +17,11 @@
 		<grant role="*" />
 	</route>
 
+	<route name="captcha" pattern="^/captcha.png$">
+		<view name="osmf.Captcha"/>
+		<grant role="*" />
+	</route>
+
 
 	<!-- User management URLs -->
 	<route name="login" pattern="^/login/$">
@@ -48,38 +53,78 @@
 		<grant role="customer" />
 	</route>
 
-
-	<!-- Auditing URLs -->
-	<route name="logs" pattern="^/logs/$">
-		<!-- TODO -->
-		<view name="audit.ViewLogs"/>
+	<route name="change-user-status" pattern="^/users/change-status/$">
+		<view name="auth.ChangeUserStatus"/>
 		<grant role="admin" />
 	</route>
 
 
+	<!-- Auditing URLs -->
+	<route name="logs" pattern="^/logs/$">
+		<!-- TODO -->
+		<view name="logging.ViewLogs"/>
+		<grant role="admin" />
+	</route>
+
+	<route name="log-file" pattern="^/logs/(?'name'log_\d{4}-\d\d-\d\d\.txt)$">
+		<!-- TODO -->
+		<view name="logging.LogFile"/>
+		<grant role="admin" />
+	</route>
+
+	
 	<!-- Message management URLs -->
 	<route name="inbox" pattern="^/messages/$">
-		<!-- TODO -->
-		<view name="messages.Inbox"/>
+		<view name="messaging.Inbox"/>
 		<grant role="cro" />
 		<grant role="customer" />
 	</route>
 
 	<route name="new-message" pattern="^/messages/create/$">
-		<!-- TODO -->
-		<view name="messages.Create"/>
+		<view name="messaging.Create"/>
 		<grant role="customer" />
 	</route>
 
-	<route name="archive" pattern="^/messages/archived/$">
+	<route name="reply" pattern="^/messages/(?'id'\d+)/reply/$">
+		<view name="messaging.Reply"/>
+		<grant role="customer" />
+		<grant role="cro" />
+	</route>
+
+	<route name="archives" pattern="^/messages/archived/$">
 		<!-- TODO -->
-		<view name="messages.Archive"/>
+		<view name="messaging.Archives"/>
+		<grant role="customer" />
+		<grant role="cro" />
+	</route>
+
+	<route name="archive" pattern="^/messages/(?'id'\d+)/archive/$">
+		<view name="messaging.Archive"/>
+		<grant role="customer" />
+		<grant role="cro" />
+	</route>
+
+	<route name="attachment" pattern="^/messages/attachment/(?'name'[^/]+)$">
+		<view name="messaging.Attachment"/>
+		<grant role="customer" />
+		<grant role="cro" />
+	</route>
+
+	<route name="read-message" pattern="^/messages/(?'id'\d+)/$">
+		<view name="messaging.Read" />
+		<grant role="cro" />
+		<grant role="customer" />
+	</route>
+
+	<route name="deletion-request" pattern="^/messages/(?'id'\d+)/delete/">
+		<view name="messaging.DeletionRequest" />
+		<grant role="cro" />
 		<grant role="customer" />
 	</route>
 
 	<route name="delete-message" pattern="^/messages/delete/$">
 		<!-- TODO -->
-		<view name="messages.Delete"/>
+		<view name="messaging.Delete"/>
 		<grant role="admin" />
 	</route>
 </routes>

@@ -8,25 +8,38 @@
 	<h1>Users</h1>
 
 	<div class="title-buttons">
-		<a href="<?php $this->url('add-user') ?>" class="button small"><span>Add another user</span></a>
+		<a href="<?php $this->url('add-user') ?>" class="button small icon add">Add another user</a>
 	</div>
 
-	<table>
-		<tr>
-			<th>Username</th>
-			<th>Role</th>
-			<th colspan="2">Status</th>
-		</tr>
+	<form action="<?php $this->url('change-user-status') ?>" method="post">
+		<?php $this->csrfToken() ?>
+		<table>
+			<tr>
+				<th>Username</th>
+				<th>Role</th>
+				<th>CRO</th>
+				<th colspan="2">Status</th>
+			</tr>
 
-		<?php foreach ($users as $user): ?>
-		<tr>
-			<td><?php $this->p($user->username) ?></td>
-			<td><?php $this->p($user->role->display_name) ?></td>
-			<td class="status"><img src="<?php $this->p($config->base_url); ?>images/icons/tick.png" alt="Enabled" title="User currently enabled" /> Enabled</td>
-			<td class="actions"><a class="button small">Disable</a></td>
-		</tr>
-		<?php endforeach ?>
-	</table>
+			<?php foreach ($users as $user): ?>
+			<tr>
+				<td><?php $this->p($user->username) ?></td>
+				<td><?php $this->p($user->role->display_name) ?></td>
+				<td><?php if ($user->cro): $this->p($user->cro->username); else: ?>—<?php endif ?></td>
+				<?php if ($user->username == $request->user->getUsername()): ?>
+				<td class="status"><img src="<?php $this->p($config->base_url); ?>images/icons/tick.png" alt="Enabled" title="User currently enabled" /> Enabled</td>
+				<td class="actions"><a href="#" class="disabled small button">Disable</a></td>
+				<?php elseif ($user->enabled): ?>
+				<td class="status"><img src="<?php $this->p($config->base_url); ?>images/icons/tick.png" alt="Enabled" title="User currently enabled" /> Enabled</td>
+				<td class="actions"><button type="submit" name="disable" value="<?php $this->p($user->id) ?>" class="small">Disable</button></td>
+				<?php else: ?>
+				<td class="status"><img src="<?php $this->p($config->base_url); ?>images/icons/cross.png" alt="Disabled" title="User currently disabled" /> Disabled</td>
+				<td class="actions"><button type="submit" name="enable" value="<?php $this->p($user->id) ?>" class="small">Enable</a></td>
+				<?php endif ?>
+			</tr>
+			<?php endforeach ?>
+		</table>
+	</form>
 
 </section>
 <?php $this->endblock() ?>

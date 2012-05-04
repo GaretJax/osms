@@ -1,0 +1,62 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Read message · ' . $message->subject) ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section class="read-message">
+
+	<h1>Read message</h1>
+
+	<?php if ($message->status !== 'archived'): ?>
+	<div class="title-buttons">
+		<a href="<?php $this->url('reply', array('id' => $message->id)) ?>" class="button small">Reply</a>
+	</div>
+	<?php endif ?>
+
+	<article class="message">
+		<h2><?php $this->p($message->subject) ?></h2>
+
+		<table>
+			<tr>
+				<th>Sender:</th>
+				<td><?php $this->p($message->sender->username) ?></td>
+				<?php if ($message->attachment): ?>
+				<td rowspan="2" class="attachment">
+					<a href="<?php $this->url('attachment', array('name' => $message->attachment->getBasename())) ?>"><img src="<?php $this->p($config->base_url); ?>images/icons/attach.png" alt="Attachment" title="Message has an attachment" /> <?php $this->p($message->attachment->getBasename()) ?></a>
+					<?php $this->p($message->attachment->getType()) ?>, <?php $this->bytes2human($message->attachment->getSize()) ?>
+				</td>
+				<?php endif ?>
+			</tr>
+
+			<tr>
+				<th>Date and time:</th>
+				<td><?php $this->p($message->timestamp->format('F d, Y – H:i:s')) ?></td>
+			</tr>
+		</table>
+
+		<div>
+			<?php $this->nl2p($message->body) ?></td>
+		</div>
+	</article>
+
+	<ul>
+		<?php if ($message->status === 'archived'): ?>
+			<li><a href="<?php $this->url('archives') ?>" class="button small">&larr; Return to list</a></li>
+		<?php else: ?>
+			<li><a href="<?php $this->url('inbox') ?>" class="button small">&larr; Return to list</a></li>
+			<li><a href="<?php $this->url('archive', array('id' => $message->id)) ?>" class="button small">Archive</a></li>
+			<?php if ($message->attachment): ?>
+				<li><a href="<?php $this->url('archive', array('id' => $message->id)) ?>?delete-attachment" class="button small">Remove attachments & archive</a></li>
+			<?php endif ?>
+		<?php endif ?>
+		<li>
+			<form method="post" action="<?php $this->url('deletion-request', array('id' => $message->id)) ?>">
+				<?php $this->csrfToken() ?>
+				<button type="submit" class="small">Request deletion</button>
+			</form>
+		</li>
+	</ul>
+
+</section>
+<?php $this->endblock() ?>

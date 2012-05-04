@@ -1,0 +1,23 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Delete a message') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section>
+	<h1>Delete a message</h1>
+
+	<?php if ($error): ?>
+	<p class="error">The token you entered is incorrect.</p>
+	<?php endif; ?>
+
+
+	<form method="post">
+		<?php $this->csrfToken() ?>
+		<?php $this->r($form->token->render()) ?>
+		<button type="submit" class="small" name="action" value="cancel-request">Cancel request</button>
+		<button type="submit" class="small icon trash" name="action" value="delete-message">Delete message</button>
+	</form>
+
+</section>
+<?php $this->endblock() ?>

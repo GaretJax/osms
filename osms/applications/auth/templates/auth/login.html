@@ -7,14 +7,19 @@
 <section>
 		<h1>Login</h1>
 
-		<?php if ($error): ?>
+		<?php if ($form_errors): ?>
+		<div class="errorlist">
+			<p>Some errors occurred during the validation:</p>
+			<?php echo $form->errorlist(); ?>
+		</div>
+		<?php elseif ($error): ?>
 		<p class="error">Invalid username or password, please try again.</p>
-		<?php endif; ?>
+		<?php endif ?>
 
 		<form method="post">
 			<?php $this->r($this->csrfToken()) ?>
-			<?php $this->r($form->render()) ?>
-			<button type="submit" class="small">Login &rarr;</button>
+			<?php $this->r($form->render($this)) ?>
+			<button type="submit" class="small">Login</button>
 		</form>
 	</section>
 <?php $this->endblock() ?>

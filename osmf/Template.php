@@ -118,6 +118,12 @@ class Template
 		return $this->printRaw($value);
 	}
 
+	public function inc($tpl)
+	{
+		$tpl = new \osmf\Template($tpl);
+		echo $tpl->render($this->context);
+	}
+
 	public function extend($template)
 	{
 		if (!is_null($this->base)) {

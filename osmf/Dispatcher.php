@@ -4,11 +4,18 @@
 class Dispatcher
 {
 	protected $router;
+	protected $logger;
 	protected $middlewares = array();
 
 	public function __construct($router)
 	{
 		$this->router = $router;
+
+		$log_dir = Config::get('log_dir');
+		$severity = Config::get('log_severity');
+		$this->logger = new Logger($log_dir, $severity);
+		$router->setLogger($this->logger);
+
 		$this->loadMiddlewares();
 	}
 
@@ -24,6 +31,11 @@ class Dispatcher
 	public function getRouter()
 	{
 		return $this->router;
+	}
+
+	public function getLogger()
+	{
+		return $this->logger;
 	}
 
 	protected function getUrl()
@@ -42,12 +54,13 @@ class Dispatcher
 
 	protected function getRequest()
 	{
-		$request = new Http\Request($this->getUrl(), $_SERVER['REQUEST_METHOD'], $_GET, $_POST, $_COOKIE);
+		$request = new Http\Request($this->getUrl(), $_SERVER['REQUEST_METHOD'], $_GET, $_POST, $_FILES, $_COOKIE);
 
 		// Clean the global environment
 		unset($_POST);
 		unset($_GET);
 		unset($_REQUEST);
+		unset($_FILES);
 
 		// We can't clear cookies without having to hack around to make
 		// sessions work without them. And, clearly, we hacked around!
@@ -64,6 +77,7 @@ class Dispatcher
 			$middlewares = $this->middlewares;
 		}
 
+		array_unshift($arguments, $this);
 		$method = 'process_' . $method;
 
 		foreach ($middlewares as $middleware) {
@@ -96,9 +110,8 @@ class Dispatcher
 
 	public function dispatch()
 	{
-		// TODO: Pass arguments for GET, POST, etc to the request object.
-		//       Only the dispatcher should be aware of global variables.
 		$request = $this->getRequest();
+		$this->logger->setRequest($request);
 
 		try {
 			// Process the request middlewares before anything else. If a response
@@ -134,33 +147,17 @@ class Dispatcher
 			if ($response === NULL) {
 				// No errors where thrown in the previous phase, continue with
 				// normal rendering flow
-				$view = $route->getView($this, $request);
+				$view = $route->getView($this, $this->logger, $request);
 
 				$response = $this->process_middlewares(
-					'view', array($request, $view),
+					'view', array($request, $route, $view),
 					'\osmf\Http\Response'
 				);
 			}
 
 			if ($response === NULL) {
 				// No response was returned until now, render the view
-				try {
-					$response = $view->render($request, $route->getArgs());
-				} catch (\Exception $e) {
-					// An exception occurred while rendering a view,
-					// process exception middlewares in reverse order
-					// and stop as soon as we have a valid response object.
-					$response = $this->process_middlewares(
-						'exception', array($request, $e),
-						'\osmf\Http\Response', TRUE
-					);
-
-					// If no exception middleware returned a valid response,
-					// raise the exception.
-					if ($response === NULL) {
-						throw $e;
-					}
-				}
+				$response = $this->processView($request, $route, $view);
 			}
 
 			// Process response middlewares in reverse order and update the 
@@ -173,12 +170,11 @@ class Dispatcher
 
 			return $response;
 		} catch (\Exception $e) {
-			// TODO: Count them!
 			while (ob_get_level() > 1) {
 				ob_end_clean();
 			}
 
-			$view = new Views\DirectToTemplate($this, array(
+			$view = new Views\DirectToTemplate($this, $this->logger, array(
 				'template' => Config::get('debug') ? '500-debug.html' : '500.html',
 				'response_class' => '\osmf\Http\Response\ServerError',
 			), array(
@@ -186,5 +182,28 @@ class Dispatcher
 			));
 			return $view->render($request, new \stdClass());
 		}
+	}
+
+	public function processView($request, $route, $view)
+	{
+		try {
+			$response = $view->render($request, $route->getArgs());
+		} catch (\Exception $e) {
+			// An exception occurred while rendering a view,
+			// process exception middlewares in reverse order
+			// and stop as soon as we have a valid response object.
+			$response = $this->process_middlewares(
+				'exception', array($request, $e),
+				'\osmf\Http\Response', TRUE
+			);
+
+			// If no exception middleware returned a valid response,
+			// raise the exception.
+			if ($response === NULL) {
+				throw $e;
+			}
+		}
+
+		return $response;
 	}
 }

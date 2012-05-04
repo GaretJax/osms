@@ -3,7 +3,7 @@
 
 class Primarykey extends \osmf\Model\Field
 {
-	public function toPhp($value)
+	public function toPhp($value, $dbconf)
 	{
 		return intval($value);
 	}

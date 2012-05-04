@@ -3,7 +3,7 @@
 
 class SessionMiddleware extends Middleware
 {
-	public function process_request($request)
+	public function process_request($dispatcher, $request)
 	{
 		$config = Config::getInstance();
 		$name = $config->session['name'];
@@ -20,7 +20,7 @@ class SessionMiddleware extends Middleware
 
 class AuthenticationMiddleware extends Middleware
 {
-	public function process_request($request)
+	public function process_request($dispatcher, $request)
 	{
 		$request->user = new Auth\User($request->session);
 	}
@@ -29,7 +29,7 @@ class AuthenticationMiddleware extends Middleware
 
 class CsrfMiddleware extends Middleware
 {
-	public function process_request($request)
+	public function process_request($dispatcher, $request)
 	{
 		// TODO: Also check other http methods
 		if ($request->method == 'POST') {
@@ -46,7 +46,7 @@ class CsrfMiddleware extends Middleware
 
 class NotFoundMiddleware extends Middleware
 {
-	public function process_exception($request, $exception)
+	public function process_exception($dispatcher, $request, $exception)
 	{
 		if (!is_a($exception, '\osmf\Http\Error\Http404')) {
 			return NULL;
@@ -60,12 +60,12 @@ class NotFoundMiddleware extends Middleware
 			
 		$context = new \stdClass();
 		$context->exception = $exception;
-		$view = new Views\DirectToTemplate(array(
+		$view = new Views\DirectToTemplate($dispatcher, $dispatcher->getLogger(), array(
 			'template' => $tpl,
 			'response_class' => '\osmf\Http\Response\NotFound',
 		), $context);
 
-		$response = $view->render($request);
+		$response = $view->render($request, array());
 		return $response;
 	}
 }

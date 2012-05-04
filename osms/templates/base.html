@@ -17,23 +17,22 @@
 		<nav>
 		<?php if ($user->getRole() == 'customer'): ?>
 			<ul>
-				<li><a href="<?php $this->url('index') ?>">Index</a></li>
 				<li><a href="<?php $this->url('new-message') ?>">New message</a></li>
 				<li><a href="<?php $this->url('inbox') ?>">Inbox</a></li>
-				<li><a href="<?php $this->url('archive') ?>">Archive</a></li>
+				<li><a href="<?php $this->url('archives') ?>">Archive</a></li>
 				<li><a href="<?php $this->url('change-password') ?>">Change password</a></li>
 				<li><a href="<?php $this->url('logout') ?>">Logout</a></li>
 			</ul>
 		<?php elseif ($user->getRole() == 'cro'): ?>
 			<ul>
-				<li><a href="<?php $this->url('index') ?>">Index</a></li>
+				<!--li><a href="<?php $this->url('index') ?>">Index</a></li-->
 				<li><a href="<?php $this->url('inbox') ?>">Inbox</a></li>
+				<li><a href="<?php $this->url('archives') ?>">Archive</a></li>
 				<li><a href="<?php $this->url('change-password') ?>">Change password</a></li>
 				<li><a href="<?php $this->url('logout') ?>">Logout</a></li>
 			</ul>
 		<?php elseif ($user->getRole() == 'admin'): ?>
 			<ul>
-				<li><a href="<?php $this->url('index') ?>">Index</a></li>
 				<li><a href="<?php $this->url('manage-users') ?>">User management</a></li>
 				<li><a href="<?php $this->url('logs') ?>">Audit logs</a></li>
 				<li><a href="<?php $this->url('delete-message') ?>">Delete a message</a></li>
@@ -42,12 +41,21 @@
 			</ul>
 		<?php else: ?>
 			<ul>
-				<li><a href="<?php $this->url('index') ?>">Index</a></li>
 				<li><a href="<?php $this->url('login') ?>">Login</a></li>
 			</ul>
 		<?php endif; ?>
 		</nav>
 	</header>
+
+	<?php if ($message_queue): ?>
+	<aside>
+		<ul>
+			<?php foreach ($message_queue as $message): ?>
+				<li><?php $this->p($message) ?></li>
+			<?php endforeach ?>
+		</ul>
+	</aside>
+	<?php endif ?>
 
 	<?php $this->block('content') ?>
 

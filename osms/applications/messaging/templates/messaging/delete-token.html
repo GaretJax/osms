@@ -1,0 +1,30 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Message deletion token') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section class="deletion-token">
+	<h1>Message deletion token</h1>
+
+	<p>Communicate the following token to our support staff representative to delete the message with the subject
+	<strong><?php $this->p($message->subject) ?></strong> which you received from
+	<strong><?php $this->p($message->sender->username) ?></strong> on
+	<strong><?php $this->p($message->timestamp->format('M d, Y')) ?></strong> at
+	<strong><?php $this->p($message->timestamp->format('H:i:s')) ?></strong>.<?php if ($message->attachment): ?><br />The attachment named
+	<strong><?php $this->p($message->attachment->getBasename()) ?></strong> will be deleted as well.<?php endif ?></p>
+
+	<p class="token"><strong><?php $this->p($token->formattedToken) ?></strong></p>
+
+	<p>This token was generated on <strong><?php $this->p($token->timestamp->format('M d, Y')) ?></strong> at
+	<strong><?php $this->p($token->timestamp->format('H:i:s')) ?></strong></p>
+	
+	<p>
+		<?php if ($message->status === 'archived'): ?>
+		<a class="button" href="<?php $this->url('archives') ?>">&larr; Back to the archives</a>
+		<?php else: ?>
+		<a class="button" href="<?php $this->url('inbox') ?>">&larr; Back to the inbox</a>
+		<?php endif ?>
+	</p>
+</section>
+<?php $this->endblock() ?>

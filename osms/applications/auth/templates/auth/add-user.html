@@ -1,0 +1,25 @@
+<?php $this->uselib('components/plugins') ?>
+<?php $this->set('page_title', 'Add a new user') ?>
+
+<?php $this->extend('base.html') ?>
+
+<?php $this->startblock('content') ?>
+<section>
+		<h1>Add a new user</h1>
+
+		<?php if ($error): ?>
+		<div class="errorlist">
+			<p>Some errors occurred during the validation:</p>
+			<?php echo $form->errorlist(); ?>
+		</div>
+		<?php endif; ?>
+
+		<form method="post">
+			<?php $this->r($this->csrfToken()) ?>
+			<?php $this->r($form->render()) ?>
+			<button type="submit" class="">Add user</button>
+		</form>
+	</section>
+<?php $this->endblock() ?>
+
+
