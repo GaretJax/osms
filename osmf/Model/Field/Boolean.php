@@ -11,9 +11,9 @@ class Boolean extends \osmf\Model\Field
 	public function toDb($value)
 	{
 		if ($value) {
-			return '1';
+			return 1;
 		} else {
-			return '0';
+			return 0;
 		}
 	}
 }

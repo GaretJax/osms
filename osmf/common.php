@@ -34,11 +34,15 @@ function join_paths()
 		$path = trim($path, '/');
 	}
 
-	$paths = array_filter($paths);
+	$paths = array_values(array_filter($paths));
 
 	// Keep starting slashes
 	if (substr($args[0], 0, 1) == '/') {
-		$paths[0] = '/' . $paths[0];
+		if ($paths) {
+			$paths[0] = '/' . $paths[0];
+		} else {
+			return '/';
+		}
 	}
 
 	// Keep ending slashes

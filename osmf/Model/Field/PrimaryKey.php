@@ -10,7 +10,7 @@ class Primarykey extends \osmf\Model\Field
 
 	public function toDb($value)
 	{
-		return strval(intval($value));
+		return intval($value);
 	}
 }
 
