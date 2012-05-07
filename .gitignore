@@ -7,3 +7,5 @@ Gemfile.lock
 *.js
 /info.php
 htdocs/images/icons
+osms/uploads
+osms/logs
