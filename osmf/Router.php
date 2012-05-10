@@ -6,10 +6,13 @@ class Router
 	private $routes = array();
 	private $app_root = '';
 	private $logger;
+	private $config;
+	const FLAGS = 'e';
 
 	public function __construct($app_root)
 	{
 		$this->app_root = $app_root;
+		$this->config = Config::getInstance();
 	}
 
 	public function setLogger($logger)
@@ -76,7 +79,11 @@ class Router
 
 		if ($args) {
 			foreach ($args as $key => $val) {
-				$pattern = preg_replace("%\(\?'$key'([^\)]+)\)%e", "\osmf\substitute('$1', '$val')", $pattern);
+				$pattern = preg_replace(
+					"%\(\?'$key'([^\)]+)\)%" . Router::FLAGS,
+					"\osmf\substitute('$1', '$val')",
+					$pattern
+				);
 			}
 		}
 
@@ -120,5 +127,5 @@ function substitute($pattern, $val)
 		throw new \Exception("Invalid subsitution");
 	}
 
-	return $val;
+	return urlencode($val);
 }

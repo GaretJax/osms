@@ -138,8 +138,11 @@ abstract class Model
 
 		// Retrieve the ID
 		if (!$this->id) {
-			$this->id = $this->dbh->lastInsertId($this->table);
+			unset($this->phpValues['id']);
+			$this->loadedValues['id'] = $this->dbh->lastInsertId($this->table);
 		}
+
+		$this->values = array();
 	}
 
 	public function delete()

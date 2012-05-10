@@ -10,9 +10,13 @@ class Driver
 	protected function __construct($type, $host, $name, $user, $pass)
 	{
 		$this->type = $type;
-		$connstring = sprintf('%s:host=%s;dbname=%s', $type, $host, $name);
+		if (\startswith($host, '/')) {
+			$connstring = sprintf('%s:unix_socket=%s;dbname=%s', $type, $host, $name);
+		} else {
+			$connstring = sprintf('%s:host=%s;dbname=%s', $type, $host, $name);
+		}
 		$this->dbh = new \PDO($connstring, $user, $pass, array(
-			\PDO::ATTR_PERSISTENT => true,
+			\PDO::ATTR_PERSISTENT => FALSE,
 			\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
 		));
 	}

@@ -4,7 +4,6 @@
 class File extends \osmf\Http\Response
 {
 	protected $file;
-	protected $error;
 
 	public function __construct($file)
 	{

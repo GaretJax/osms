@@ -32,12 +32,10 @@ class Enum extends \osmf\Model\Field
 			$value = $this->default;
 		}
 
-		$value = array_search($value, $this->choices);
-
-		if ($value === FALSE) {
+		if (!in_array($value, $this->choices)) {
 			throw new \osmf\Model\ValidationError('Invalid choice, value cannot be saved to the database');
 		}
 
-		return $value;
+		return array_search($value, $this->choices);
 	}
 }

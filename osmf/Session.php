@@ -14,7 +14,8 @@ class Session
 			session_id($session_id);
 		}
 
-		$domain = $_SERVER['HTTP_HOST'];
+		$domain = explode(':', $_SERVER['HTTP_HOST']);
+		$domain = $domain[0];
 		$secure = isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on';
 		$httponly = TRUE;
 
