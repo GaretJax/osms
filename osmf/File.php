@@ -1,5 +1,11 @@
 <?php namespace osmf;
 
+
+class FileNotFound extends \Exception
+{}
+
+
+
 class File
 {
 	protected $path;

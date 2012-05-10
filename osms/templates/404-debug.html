@@ -1,3 +1,5 @@
+<?php $this->uselib('components/plugins') ?>
+
 <?php $this->set('page_title', 'Page not found') ?>
 
 <?php $this->extend('base.html') ?>
@@ -5,5 +7,19 @@
 <?php $this->startblock('content') ?>
 	<section>
 		<h1>Error 404: Resource not found</h1>
+
+		<?php
+			$file = str_replace(APPLICATION_PATH . '/', '', $exception->getFile());
+			$file = str_replace(LIBRARIES_PATH . '/', '', $file);
+		?>
+
+		<h2>Error of type <code><?php $this->p(get_class($exception)) ?></code> thrown in <code><?php $this->p($file) ?></code> at line <code><?php $this->p($exception->getLine()) ?></code></h2>
+		<?php if ($exception->getMessage()): ?>
+			<p class="error"><?php echo $exception->getMessage() ?></p>
+		<?php endif ?>
+
+		<h2>Complete stack trace</h2>
+		<?php $this->backtrace($exception) ?>
+
 	</section>
 <?php $this->endblock() ?>

@@ -4,10 +4,12 @@
 class Driver
 {
 	protected static $instances = array();
+	protected $type;
 	protected $dbh;
 
 	protected function __construct($type, $host, $name, $user, $pass)
 	{
+		$this->type = $type;
 		$connstring = sprintf('%s:host=%s;dbname=%s', $type, $host, $name);
 		$this->dbh = new \PDO($connstring, $user, $pass, array(
 			\PDO::ATTR_PERSISTENT => true,
@@ -36,6 +38,11 @@ class Driver
 		}
 
 		return Driver::$instances[$confname];
+	}
+
+	public function getDatabaseType()
+	{
+		return $this->type;
 	}
 
 	public function beginTransaction()
@@ -107,7 +114,6 @@ class Driver
 
 	public function lastInsertId($table, $field='id')
 	{
-		// TODO: Check this on mysql
 		$seq = implode('_', array($table, $field, 'seq'));
 		return intval($this->dbh->lastInsertId($seq));
 	}

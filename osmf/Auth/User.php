@@ -56,7 +56,8 @@ class User
 			$dbconf = \osmf\Config::get('user_dbconf');
 
 			try {
-				$model = $class::getEnabledById($session->get('user_id'), $dbconf);
+				$userid = $session->get('user_id');
+				$model = $class::getEnabledById($userid, $dbconf);
 				return $this->loginAs($model);
 			} catch(\osmf\Model\ObjectNotFound $e) {
 				// User does not exist anymore (disabled)

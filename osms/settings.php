@@ -4,7 +4,7 @@
 $config = Config::getInstance();
 
 
-$config->debug = TRUE;
+$config->debug = FALSE;
 
 
 /**
@@ -31,7 +31,8 @@ $config->middleware_classes = array(
 	'\osmf\SessionMiddleware',
 	'\osmf\AuthenticationMiddleware',
 	'\osmf\CsrfMiddleware',
-	'\osmf\NotFoundMiddleware',
+	'\osmf\ExceptionTo404Middleware',
+	'\osmf\PermissionDeniedMiddleware',
 );
 
 /**
@@ -84,14 +85,14 @@ $config->login_redirect_url = 'index';
  */
 $config->databases = array(
 	'default' => array(
-		'type' => 'pgsql',
+		'type' => 'mysql',
 		'host' => '127.0.0.1',
 		'name' => 'osms',
 		'user' => 'osms',
 		'pass' => '123456osms',
 	),
 	'admin' => array(
-		'type' => 'pgsql',
+		'type' => 'mysql',
 		'host' => '127.0.0.1',
 		'name' => 'osms',
 		'user' => 'osms_admin',

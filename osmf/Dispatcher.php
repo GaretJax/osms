@@ -127,6 +127,7 @@ class Dispatcher
 				// middlewares returned a response object.
 				try {
 					$route = $this->router->route($request->path);
+					$view = $route->getView($this, $this->logger, $request);
 				} catch(\Exception $e) {
 					// An exception occurred while routing a request,
 					// process exception middlewares in reverse order
@@ -147,8 +148,6 @@ class Dispatcher
 			if ($response === NULL) {
 				// No errors where thrown in the previous phase, continue with
 				// normal rendering flow
-				$view = $route->getView($this, $this->logger, $request);
-
 				$response = $this->process_middlewares(
 					'view', array($request, $route, $view),
 					'\osmf\Http\Response'

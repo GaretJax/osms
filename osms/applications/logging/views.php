@@ -36,10 +36,8 @@ class LogFile extends \osmf\View
 			)
 		);
 		$name = $file->getBasename();
-
 		$this->logger->logNotice("Downloading log file named $name");
 
-		// TODO: Raise 404 if file not found
 		return new \osmf\Http\Response\File($file);
 	}
 }

@@ -90,6 +90,7 @@ abstract class Model
 			$values[$key] = $fields[$column]->toDb($val);
 		}
 
+		//var_dump($values);
 		//$stmt->debugDumpParams();
 		$stmt->execute($values);
 
@@ -112,8 +113,6 @@ abstract class Model
 
 	public function save()
 	{
-		
-		
 		$fields = $this->getDirtyFields();
 
 		$values = array();
@@ -133,6 +132,7 @@ abstract class Model
 			$stmt = $this->dbh->prepareInsertStatement($this->table, $fields);
 		}
 
+		//var_dump($values);
 		//$stmt->debugDumpParams();
 		$stmt->execute($values);
 

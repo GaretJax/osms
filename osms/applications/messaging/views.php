@@ -182,8 +182,6 @@ class Read extends \osmf\View\Transaction
 			->and('id', 'eq', $args['id'])
 			->one();
 
-		// TODO: Raise 404 if not found
-
 		if ($message->status === 'unread') {
 			$this->logger->logNotice("Marking message with ID $message->id as read");
 
@@ -260,7 +258,6 @@ class Archive extends \osmf\View\Transaction
 {
 	protected function getMessage($user, $id)
 	{
-		// TODO Catch exeption and render 404 (middleware?)
 		return models\Message::query()
 			->where('recipient', 'eq', $user)
 			->and('id', 'eq', $id)
@@ -406,7 +403,10 @@ class Attachment extends \osmf\View
 
 		$this->logger->logNotice("Downloading attachment for message with ID $message->id");
 
-		// TODO: Raise 404 if message has no attachment, also check on disk if file exists
+		if (!$message->attachment) {
+			throw new \osmf\Http\Error\Http404("This message has no attachment");
+		}
+
 		return new \osmf\Http\Response\File($message->attachment);
 	}
  }

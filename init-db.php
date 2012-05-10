@@ -16,19 +16,18 @@ require_once 'osmf/bootstrap.php';
 
 
 try {
-	$customer = \osms\auth\models\Role::get(array('name' => 'customer'));
-	foreach (\osms\auth\models\User::filter(array('role' => $customer)) as $user) {
+	$customer = \osms\auth\models\Role::query()->where('name', 'eq', 'customer')->one();
+	foreach (\osms\auth\models\User::query()->where('role', 'eq', $customer)->all() as $user) {
 		$user->delete();
 	}
 } catch (\osmf\Model\ObjectNotFound $e) {
 }
 
-foreach (\osms\auth\models\User::all() as $user) {
+foreach (\osms\auth\models\User::query()->all() as $user) {
 	$user->delete();
 }
 
-
-foreach (\osms\auth\models\Role::all() as $role) {
+foreach (\osms\auth\models\Role::query()->all() as $role) {
 	$role->delete();
 }
 

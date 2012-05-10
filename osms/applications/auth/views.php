@@ -170,14 +170,25 @@ class AddUser extends \osmf\View\Transaction
 		$form = new forms\User($request->POST);
 
 		if ($form->isValid()) {
-			// TODO: Handle duplicate user exception
 			$user = new models\User('admin');
 			$user->username = $form->cleaned_data['username'];
 			$user->setPassword($form->cleaned_data['password_1']);
 			$user->enabled = $form->cleaned_data['enabled'];
 			$user->role = $form->cleaned_data['role'];
 			$user->cro = $form->cleaned_data['cro'];
-			$user->save();
+			$i = 1;
+			while (True) {
+				try {
+					$user->save();
+					break;
+				} catch (\PDOException $e) {
+					if ($e->getCode() != 23000 or $i > 100) {
+						throw $e;
+					}
+					$user->username = $form->cleaned_data['username'] . $i;
+					$i++;
+				}
+			}
 			$this->message("The user $user->username was correcly added!");
 			$this->logger->logNotice("New user $user->username correctly added to the system");
 			return $this->redirect($this->reverse('manage-users'));

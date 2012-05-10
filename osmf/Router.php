@@ -108,7 +108,7 @@ class Router
 		}
 
 		$this->logger->logError("No match found for url $pathinfo");
-		throw new Http\Error\Http404("Page not found");
+		throw new Http\Error\Http404();
 	}
 }
 

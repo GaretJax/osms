@@ -209,12 +209,15 @@ class Query
 		}
 
 		if ($this->limit) {
-			// TODO
-			// MySQL
-			//$sql .= sprintf(' LIMIT %d, %d', $this->limit[0], $this->limit[1]);
-			
-			// Postgres
-			$sql .= sprintf(' LIMIT %d OFFSET %d', $this->limit[1], $this->limit[0]);
+			$type = \osmf\Database\Driver::getInstance($this->dbconf)->getDatabaseType();
+
+			if ($type === 'mysql') {
+				$sql .= sprintf(' LIMIT %d, %d', $this->limit[0], $this->limit[1]);
+			} elseif ($type === 'pgsql') {
+				$sql .= sprintf(' LIMIT %d OFFSET %d', $this->limit[1], $this->limit[0]);
+			} else {
+				throw new \NotImplementedError();
+			}
 		}
 
 		return array(

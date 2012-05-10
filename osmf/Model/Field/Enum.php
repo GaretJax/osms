@@ -19,7 +19,9 @@ class Enum extends \osmf\Model\Field
 			return $this->default;
 		}
 
-		// TODO: Check for invalid values
+		if (!array_key_exists($value, $this->choices)) {
+			throw new \osmf\Model\ValidationError('Invalid choice returned from database'); 
+		}
 
 		return $this->choices[$value];
 	}
@@ -30,9 +32,12 @@ class Enum extends \osmf\Model\Field
 			$value = $this->default;
 		}
 
-		// TODO: Check for invalid values
+		$value = array_search($value, $this->choices);
 
-		return array_search($value, $this->choices);
+		if ($value === FALSE) {
+			throw new \osmf\Model\ValidationError('Invalid choice, value cannot be saved to the database');
+		}
+
+		return $value;
 	}
 }
-

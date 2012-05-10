@@ -33,7 +33,8 @@ class Route
 		}
 
 		$this->logger->logWarn("Access to $this->view denied");
-		throw new \Exception('Permission denied');
+		
+		throw new PermissionDenied();
 	}
 
 	public function getView($dispatcher, $logger, $request)

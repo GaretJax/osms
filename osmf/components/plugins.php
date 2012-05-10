@@ -102,7 +102,6 @@ class TextToParagraphPlugin extends \osmf\Template\Plugin
 	public function render($template, $context, $args)
 	{
 		$value = $args[0];
-		// TODO: Could we insert a vulnerability here?
 		$value = htmlspecialchars($value);
 		$value = preg_replace("%\s*(\r|\n){2}\s*%m", "</p>\n<p>", $value);
 
